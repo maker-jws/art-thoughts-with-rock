@@ -22,7 +22,6 @@ class CanvasBG extends Component {
 
     }
     render() {
-
         const canvasStyle = {
             'border': "1px solid black",
         };
