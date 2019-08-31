@@ -19,7 +19,19 @@ class CanvasBG extends Component {
         // Fill with gradient
         ctx.fillStyle = grd;
         ctx.fillRect(0, 0, this.props.winWidth, this.props.winHeight);
+    }
+    // componentDidUpdate() {
 
+    //     this.updateBGSize();
+    // }
+    updateBGSize() {
+        const newHeight = Math.floor(window.innerHeight)
+        const newWidth = Math.floor(window.innerHeight)
+        console.log(newHeight, newWidth)
+        this.setState({
+            winWidth: newWidth, //sets state of window so the canvas will always remain somewhat proportional and smaller than the whole window
+            winHeight: newHeight,
+        })
     }
     render() {
         const canvasStyle = {
