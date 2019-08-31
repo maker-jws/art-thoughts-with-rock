@@ -73,7 +73,7 @@ class App extends Component {
 
     return (<div className="App">
       <Navbar />
-      <main className="App-main"><MainContainer /></main>
+      <main className="App-main"><MainContainer resultsToRender={this.state.chosenResults} /></main>
       <FooterNav searchSubmit={this.handleSearchSubmit} />
     </div>);
   }
