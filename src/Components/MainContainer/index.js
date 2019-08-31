@@ -39,18 +39,36 @@ class MainContainer extends Component {
     }
     render() {
         const allRocks = [
-            '../../assets/img/rock01.png',
-            '../../assets/img/rock01.png',
-            '../../assets/img/rock01.png',
-            '../../assets/img/rock01.png',
-            '../../assets/img/rock01.png',
-            '../../assets/img/rock01.png',
-            '../../assets/img/rock01.png',
-            '../../assets/img/rock01.png',
-            '../../assets/img/rock01.png',
-            '../../assets/img/rock01.png',
-            '../../assets/img/rock01.png',
+            `../../assets/img/rock01.png`,
+            `../../assets/img/rock2.png`,
+            `../../assets/img/rock3.png`,
+            `../../assets/img/rock4.png`,
+            `../../assets/img/rock5.png`,
+            `../../assets/img/rock6.png`,
+            `../../assets/img/rock7.png`,
+            `../../assets/img/rock8.png`,
+            `../../assets/img/rock9.png`,
+            `../../assets/img/rock10.png`,
         ]
+        const getSomeRocks = (items, count) => {
+            let choices = [];
+            for (let r = 0; r < count; r++) {
+                let index = Math.floor(Math.random() * items.length)
+                let choice = items[index];
+                // console.log(index, 'choice', choice, 'chosen Item');
+                // console.log(choices)
+                choices.push(choice);
+            }
+            return choices;
+        }
+        const theRocks = getSomeRocks(allRocks, 3);
+        const displayTheRocks = theRocks.map(rock => {
+            //this is an array
+            let count = Math.floor(Math.random() * 100)
+            console.log(rock, 'inside displayTheRocks')
+            // return <img key={count} src={require(rock)} />;
+        })
+
         const imgStyle = {
             width: "400px",
             height: "400px",
@@ -59,9 +77,11 @@ class MainContainer extends Component {
             left: '40%',
             zIndex: '150'
         }
+        console.log(displayTheRocks);
         return (
             <div>
                 <h1 className="hidden">This is the main container</h1>
+                {/* {displayTheRocks} */}
                 <CanvasBG className="Canvas-BG-grad" text={'this is a start'} winWidth={this.state.winWidth} winHeight={this.state.winHeight} clickedX={this.state.clickedX} clickedY={this.state.clickedY} onClicked={this.onClicked} />
                 <img src={rock0} style={imgStyle} />
                 <img src={rock1} style={imgStyle} />
