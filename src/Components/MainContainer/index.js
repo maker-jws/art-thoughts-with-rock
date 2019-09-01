@@ -43,7 +43,7 @@ class MainContainer extends Component {
         return (
             <div>
                 <h1 className="hidden">This is the main container</h1>
-                <CanvasBG className="Canvas-BG-grad" text={'this is a start'} winWidth={this.state.winWidth} winHeight={this.state.winHeight} clickedX={this.state.clickedX} clickedY={this.state.clickedY} onClicked={this.onClicked} />
+                {/* <CanvasBG className="Canvas-BG-grad" text={'this is a start'} winWidth={this.state.winWidth} winHeight={this.state.winHeight} clickedX={this.state.clickedX} clickedY={this.state.clickedY} onClicked={this.onClicked} /> */}
                 <RenderRock />
                 <ResultIndex filteredResults={this.state.resultsToRender} />
             </div>
