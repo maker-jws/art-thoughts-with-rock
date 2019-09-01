@@ -10,10 +10,26 @@ class MainContainer extends Component {
             winHeight: Math.floor(window.innerHeight),
             clickedX: null,
             clickedY: null,
-            resultsToRender: [this.props.resultsToRender]//passing in a 
+            resultsToRender: []//passing in a 
         }
     }
-    //currently breaks the bg component - 
+    componentDidUpdate() {
+        if (this.state.resultsToRender !== this.props.resultsToRender) {
+            this.sendUpdatedResults();
+        }
+    }
+    getUpdatedResult = () => {
+        let sentResults = this.props.resultsToRender
+        console.log(sentResults, 'array inside getUpdatedResults')
+        return sentResults
+    }
+
+    sendUpdatedResults = async () => {
+        const results = await this.getUpdatedResult();
+        this.setState({
+            resultsToRender: results
+        })
+    }
 
     onClicked = (x, y) => {
         this.setState({
@@ -21,7 +37,7 @@ class MainContainer extends Component {
             clickedX: x,
             clickedY: y,
         })
-        console.log(this.state.clickedX, this.state.clickedY)
+        // console.log(this.state.clickedX, this.state.clickedY)
     }
     render() {
         return (
@@ -29,10 +45,11 @@ class MainContainer extends Component {
                 <h1 className="hidden">This is the main container</h1>
                 <CanvasBG className="Canvas-BG-grad" text={'this is a start'} winWidth={this.state.winWidth} winHeight={this.state.winHeight} clickedX={this.state.clickedX} clickedY={this.state.clickedY} onClicked={this.onClicked} />
                 <RenderRock />
-                {this.state.resultsToRender.length > 0 ? <ResultIndex filteredList={this.state.resultsToRender} /> : null}
+                <ResultIndex filteredResults={this.state.resultsToRender} />
             </div>
         );
     }
 }
 
 export default MainContainer;
+

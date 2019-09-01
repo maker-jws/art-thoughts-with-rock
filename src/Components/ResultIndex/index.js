@@ -5,7 +5,9 @@ import React, { Component } from "react";
 class ResultIndex extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            filteredList: []
+        };
     }
     //   setPriorityStyle = task => {
     //     const highPriorityStyle = {
@@ -32,13 +34,18 @@ class ResultIndex extends Component {
     //   };
 
     render() {
-        let taskCount = 0;
-        const displayFilteredResults = this.props.filteredList.map(result => {
-            return (console.log("this is loaded"));
-        })
+        const cardStyle = {
+            height: "100px",
+            width: "100px",
+            backgroundColor: 'lightgray',
+            border: "white 1px solid",
+            boxSizing: "border-box",
+            borderBottom: "3px solid white",
+            fontSize: "36px",
+        }
         return (
             <div className="ResultIndex-wrapper">
-                <div className="ResultIndex-col">{displayFilteredResults}</div>
+                <ul style={cardStyle} className="ResultIndex-col">This is a basic card</ul>
             </div>
         );
     }

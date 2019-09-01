@@ -20,10 +20,6 @@ class CanvasBG extends Component {
         ctx.fillStyle = grd;
         ctx.fillRect(0, 0, this.props.winWidth, this.props.winHeight);
     }
-    // componentDidUpdate() {
-
-    //     this.updateBGSize();
-    // }
     updateBGSize() {
         const newHeight = Math.floor(window.innerHeight)
         const newWidth = Math.floor(window.innerHeight)
@@ -35,7 +31,7 @@ class CanvasBG extends Component {
     }
     render() {
         const canvasStyle = {
-            'border': "1px solid black",
+            border: "1px solid black",
         };
         return (
             <div>
