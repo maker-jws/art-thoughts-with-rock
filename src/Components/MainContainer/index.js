@@ -22,8 +22,9 @@ class MainContainer extends Component {
 
     handleSearchSubmit = async (query) => {
         try {
-            this.setState({ searchHistory: [...this.state.searchHistory, query] });
-            this.retrieveItems();
+            this.setState({ searchHistory: [...this.state.searchHistory, query] }, () => {
+                this.retrieveItems();
+            })
         }
         catch (err) {
             console.log(err)
@@ -59,7 +60,8 @@ class MainContainer extends Component {
     retrieveItems = async () => {
 
         try {
-            const q = this.state.searchHistory[-1]
+            const q = this.state.searchHistory[this.state.searchHistory.length - 1]
+            console.log(this.state.searchHistory)
             const responseQuery = await fetch("https://www.googleapis.com/customsearch/v1?key=AIzaSyCyVfsN9ihaglSFcP9SM-NQwdzlnFFOsys&cx=013070184471859259983%3Aakjlb1b5hvu&q=" + q, {
                 method: "GET",
                 credentials: "include",
