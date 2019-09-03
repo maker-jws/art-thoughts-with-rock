@@ -57,20 +57,34 @@ class MainContainer extends Component {
         }
     }
     retrieveItems = async () => {
+
         try {
-            const temp = []
-            //get request from server; 
-            fullResponse.items.map((item, idx) => {
-                // console.log(item);
-                temp.push(item);
+            const q = this.state.searchHistory[-1]
+            const responseQuery = await fetch("https://www.googleapis.com/customsearch/v1?key=AIzaSyCyVfsN9ihaglSFcP9SM-NQwdzlnFFOsys&cx=013070184471859259983%3Aakjlb1b5hvu&q=" + q, {
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                }
             });
-            this.setState({ allResults: [temp] }, () => {
-                this.filteredItems(temp)
-            })
+            if (responseQuery.status !== 200) {
+                throw Error("Error 404 from Server");
+            } else {
+                const temp = [];
+                const searchQueryResponse = await responseQuery.json();
+                console.log(searchQueryResponse, "query response");
+                searchQueryResponse.items.map((item, idx) => {
+                    // console.log(item);
+                    temp.push(item);
+                });
+                this.setState({ allResults: temp }, () => {
+                    this.filteredItems(temp)
+                })
+            }
+        } catch (err) {
+            console.log(err, "Fetch Error");
         }
-        catch (err) {
-            console.log(err)
-        }
+
     }
     previewData = () => {
         console.log(fullResponse, "whole JSON object")
