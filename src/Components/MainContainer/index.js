@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-
 import RenderRock from '../RenderRock/index'
 import ResultIndex from '../ResultIndex';
 import FooterNav from "../FooterNav/index";
 const fullResponse = require("./sample.json");
-import API_key from "./api_key.txt"
+// import API_key from "./api_key.txt"
 
 
 class MainContainer extends Component {
@@ -62,8 +61,9 @@ class MainContainer extends Component {
 
         try {
             const q = this.state.searchHistory[this.state.searchHistory.length - 1]
+            const api_key = "AIzaSyCyVfsN9ihaglSFcP9SM-NQwdzlnFFOsys"
             console.log(this.state.searchHistory)
-            const responseQuery = await fetch("https://www.googleapis.com/customsearch/v1?key=" + { API_key } + "&cx=013070184471859259983%3Aakjlb1b5hvu&q=" + q, {
+            const responseQuery = await fetch("https://www.googleapis.com/customsearch/v1?key=" + api_key + "&cx=013070184471859259983%3Aakjlb1b5hvu&q=" + q, {
                 method: "GET",
                 credentials: "include",
                 headers: {
