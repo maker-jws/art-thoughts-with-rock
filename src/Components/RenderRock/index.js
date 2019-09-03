@@ -46,19 +46,20 @@ class RenderRock extends Component {
     }
     render() {
         const theRocks = this.getSomeRocks(this.state.allRocks, 3);
+        console.log(theRocks, 'the rocks inside render')
         // This function will grab any rocks returned by theRocks and retun n image files 
-        const displayTheRocks = theRocks.map(rock => {
-            let count = Math.floor(Math.random() * 100)
-            // console.log(rock, 'inside displayTheRocks')
-            return <img key={count} src={(rock)} />;
+        const displayTheRocks = theRocks.map((rock, i) => {
+            console.log(rock)
+            return <img key={i} src={require(rock)} />;
         })
 
         return (
             <div>
-                <img alt="a rock" src={rock0} style={this.imgStyle} />
+                {displayTheRocks}
+                < img alt="a rock" src={rock0} style={this.imgStyle} />
                 <img alt="a rock" src={rock1} style={this.imgStyle} />
                 <img alt="a rock" src={rock2} style={this.imgStyle} />
-            </div>
+            </div >
 
         );
     }

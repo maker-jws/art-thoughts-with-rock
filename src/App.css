@@ -41,6 +41,41 @@
   font-size: calc(14pt + 2vmin);
   color: white;
 }
+.Canvas-BG-grad{
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -10;
+}
+.ResultIndex-wrapper{
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  background: rgba(255, 255, 255, 0); 
+}
+.ResultsIndex-row{
+  display: 'flex';
+  flex-direction: 'row';
+  flex-wrap: 'wrap';
+  background: rgba(255, 255, 255, 0); 
+  margin-top: 10vh;
+}
+
+.ResultsIndex-card{
+  padding: "0";
+  height: "350px";
+  width: "350px";
+  border: "red 1px solid";
+  box-sizing: "border-box";
+  border-bottom: "4px solid white";
+  z-index: "25";
+  top: "10%";
+  box-shadow: "0 0 20px rgba(0 0 0 .2)";
+  text-align: "center";
+  background-color: 'lightgray';
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

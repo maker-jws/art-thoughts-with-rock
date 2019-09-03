@@ -6,7 +6,6 @@ class CanvasBG extends Component {
 
         }
     }
-
     // Create gradient
     //animated gradient tutorial: http://jsfiddle.net/fkU4Q/
     componentDidMount() {
@@ -34,7 +33,7 @@ class CanvasBG extends Component {
             border: "1px solid black",
         };
         return (
-            <div>
+            <div className="Canvas-BG-grad">
                 {/* <p>Height: {this.props.winHeight}</p>
                 <p>Width: {this.props.winWidth}</p>
                 <p>Last Clicked: {this.props.clickedX}, {this.props.clickedY} </p> */}

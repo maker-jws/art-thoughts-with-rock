@@ -4,7 +4,7 @@ import "./App.css";
 import MainContainer from "./Components/MainContainer/index"
 import Navbar from "./Components/Navbar/index"
 import FooterNav from "./Components/FooterNav/index"
-import { async } from "q";
+import CanvasBG from './Components/CanvasBG/index';
 const fullResponse = require("./sample.json");
 
 class App extends Component {
@@ -20,7 +20,10 @@ class App extends Component {
       },
       resultsLoaded: false,
       resltsLoading: false,
-
+      winWidth: Math.floor(window.innerWidth), //sets state of window so the canvas will always remain somewhat proportional and smaller than the whole window
+      winHeight: Math.floor(window.innerHeight),
+      clickedX: null,
+      clickedY: null,
     }
   }
   componentDidMount() {
@@ -51,10 +54,10 @@ class App extends Component {
         temp.push(source[index])
       }
       this.setState({
-        chosenResults: [temp]
+        chosenResults: [...temp]
       }, () => {
         // console.log('filtered results loaded')
-        // console.log('this.state.chosenResults', this.state.chosenResults)
+        console.log('this.state.chosenResults', this.state.chosenResults)
       })
     } catch (err) {
       console.log(err);
@@ -69,10 +72,12 @@ class App extends Component {
   }
   retrieveItems = () => {
     const temp = []
+    ///
     fullResponse.items.map((item, idx) => {
+      console.log(item);
       temp.push(item);
     });
-
+    console.log(temp);
     this.setState({ allResults: [temp] }, () => {
       // console.log("all results loaded in retrievedItems")
       this.filteredItems(temp)
@@ -87,6 +92,14 @@ class App extends Component {
     console.log(fullResponse.items[0].link) //title of the page
     console.log(fullResponse.items[0].snippet) //selection of the data)
   }
+  onClicked = (x, y) => {
+    this.setState({
+      ...this.state,
+      clickedX: x,
+      clickedY: y,
+    })
+    // console.log(this.state.clickedX, this.state.clickedY)
+  }
   render() {
 
     return (
@@ -94,6 +107,7 @@ class App extends Component {
         <Navbar />
         <main className="App-main"><MainContainer resultsToRender={this.state.chosenResults} /></main>
         <FooterNav searchSubmit={this.handleSearchSubmit} />
+        <CanvasBG className="Canvas-BG-grad" text={'this is a start'} winWidth={this.state.winWidth} winHeight={this.state.winHeight} clickedX={this.state.clickedX} clickedY={this.state.clickedY} onClicked={this.onClicked} />
       </div>);
   }
 }
