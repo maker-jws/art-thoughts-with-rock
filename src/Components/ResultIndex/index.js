@@ -1,54 +1,88 @@
 import React, { Component } from "react";
-import { createSecureContext } from "tls";
-// import { setPriority } from "os";
-// import { List, Segment, Button } from 'semantic-ui-react'
 
 class ResultIndex extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            resultsHaveLoaded: false,
+            filteredResults: []
         };
     }
-    componentDidUpdate() {
-        if (this.state.filteredList !== this.props.filteredResults) {
+    componentDidMount() {
+        if (this.state.filteredResults !== this.props.filteredResults) {
             this.setState({
-                filteredList: this.props.filteredResults
+                filteredResults: [...this.props.filteredResults],
+                resultsHaveLoaded: true
+            }, () => {
+                this.getAllCards();
+                console.log(this.state.filteredList, 'called from inside componentDidMount')
             })
         }
     }
-    render() {
-        const whiteBackground = {
-            backgroundColor: "white"
+    componentDidUpdate() {
+        if (this.state.filteredResults !== this.props.filteredResults) {
+            this.setState({
+                filteredResults: this.props.filteredResults,
+                resultsHaveLoaded: true
+            }, () => {
+                this.getAllCards();
+                console.log(this.state.filteredList, 'called from inside componentDidMount')
+            })
         }
-        const populateCards = () => {
-            if (this.state.filteredList !== undefined) {
-                // const currentList = this.state.filteredList[0]
-                // console.log(currentList)
-                for (let i = 0; i < 3; i++) {
-                    return (
-                        <li style={whiteBackground}>
-                            <label>Result {i}</label>
-                            {/* <h1>{currentList[i].title}</h1> */}
-                            <label>Summary:</label>
-                            <hr />
-                            {/* <p>{currentList[i].snippet}</p> */}
-                            <button onClick={() => { console.log(this) }}>Select</button>
-                            <p>just give me something</p>
-                        </li>)
-                }
-                // return (<div>a new thing</div>)
-            }
-            console.log('populateCards fired')
+    }
+    getAllCards = () => {
+        const cardStyle = {
+            padding: "0",
+            minHeight: "350px",
+            maxHeight: "450px",
+            width: "350px",
+            border: "red 1px solid",
+            boxSizing: "border-box",
+            borderBottom: "4px solid white",
+            zIndex: "25",
+            top: "10%",
+            boxShadow: "0 0 20px rgba(0 0 0 .2)",
+            textAlign: "center",
+            backgroundColor: 'lightgray',
+            margin: "1rem",
+        }
+        //pass all of the cards in from props 
+        const results = this.state.filteredResults.map((result, i) => {
+            console.log(result, i)
+            return (<ul style={cardStyle}>
+                <li>
+                    <h1>{result.title}</h1>
+                    <label>Summary:</label>
+                    <hr />
+                    <p>{result.snippet}</p>
+                    <button onClick={() => { console.log(result) }}>Select</button>
+
+                </li>
+            </ul>)
+        })
+        return results;
+    }
+
+    render() {
+        const resultsWrapperStyle = {
+            display: 'flex',
+            flexDirection: 'column',
+            marginTop: "10vh",
+        }
+        const rowStyle = {
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
         }
 
         return (
-            <div className="ResultIndex-wrapper">
-                <div className="ResultsIndex-row">
-                    <ul className="ResultsIndex-card">{populateCards()}</ul>
-                </div>
+            <div style={resultsWrapperStyle}>
+                <label>Results</label>
+                <div style={rowStyle}>{this.state.resultsHaveLoaded === true ? this.getAllCards() : null}</div>
             </div>
         );
     }
 }
 export default ResultIndex;
+
 

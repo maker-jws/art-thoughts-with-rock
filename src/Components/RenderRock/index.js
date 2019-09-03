@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
-import rock0 from '../../assets/img/rock01.png';
-import rock1 from '../../assets/img/rock2.png';
-import rock2 from '../../assets/img/rock3.png';
+import rock0 from './img/rock01.png';
+import rock1 from './img/rock2.png';
+import rock2 from './img/rock3.png';
 class RenderRock extends Component {
     constructor(props) {
         super(props);
         this.state = {
             allRocks: [
-                `../../assets/img/rock01.png`,
-                `../../assets/img/rock2.png`,
-                `../../assets/img/rock3.png`,
-                `../../assets/img/rock4.png`,
-                `../../assets/img/rock5.png`,
-                `../../assets/img/rock6.png`,
-                `../../assets/img/rock7.png`,
-                `../../assets/img/rock8.png`,
-                `../../assets/img/rock9.png`,
-                `../../assets/img/rock10.png`,
+                `./img/rock01.png`,
+                `./img/rock2.png`,
+                `./img/rock3.png`,
+                `./img/rock4.png`,
+                `./img/rock5.png`,
+                `./img/rock6.png`,
+                `./img/rock7.png`,
+                `./img/rock8.png`,
+                `./img/rock9.png`,
+                `./img/rock10.png`,
             ]
         }
     }
@@ -45,17 +45,9 @@ class RenderRock extends Component {
         return choices;
     }
     render() {
-        const theRocks = this.getSomeRocks(this.state.allRocks, 3);
-        console.log(theRocks, 'the rocks inside render')
-        // This function will grab any rocks returned by theRocks and retun n image files 
-        const displayTheRocks = theRocks.map((rock, i) => {
-            console.log(rock)
-            return <img key={i} src={require(rock)} />;
-        })
-
         return (
             <div>
-                {displayTheRocks}
+
                 < img alt="a rock" src={rock0} style={this.imgStyle} />
                 <img alt="a rock" src={rock1} style={this.imgStyle} />
                 <img alt="a rock" src={rock2} style={this.imgStyle} />
@@ -66,3 +58,6 @@ class RenderRock extends Component {
 }
 
 export default RenderRock;
+
+// // const theRocks = this.getSomeRocks(this.state.allRocks, 3);
+        // console.log(theRocks, 'the rocks inside render')
