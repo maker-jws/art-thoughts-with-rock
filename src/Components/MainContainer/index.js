@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import RenderRock from '../RenderRock/index'
 import ResultIndex from '../ResultIndex';
 import FooterNav from "../FooterNav/index";
-const fullResponse = require("./sample.json");
-
+const languageParser = require('./languageparser.js');
 class MainContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
             searchHistory: [],
+            parsedSearch: {},
             lastSearch: "",
             allResults: [],
             chosenResults: [],
@@ -17,11 +17,14 @@ class MainContainer extends Component {
             resultsToRender: []
         }
     }
-
     handleSearchSubmit = async (query) => {
         try {
-            this.setState({ searchHistory: [...this.state.searchHistory, query] }, () => {
-                this.retrieveItems();
+            this.setState({
+                searchHistory: [...this.state.searchHistory, query],
+                lastSearch: query
+            }, () => {
+                languageParser(query);
+                //r.set("searchHistory")
             })
         }
         catch (err) {
@@ -48,6 +51,9 @@ class MainContainer extends Component {
             console.log(err);
         }
     }
+    nextItem() {
+        console.log('this will choose the next ten results ')
+    }
     targetResponse = async () => {
         try {
             console.log("targetResponse Ran")
@@ -56,8 +62,8 @@ class MainContainer extends Component {
         }
     }
     retrieveItems = async () => {
-
         try {
+            //const q = this.state.parsedSearch (object)
             const q = this.state.searchHistory[this.state.searchHistory.length - 1]
             const api_key = "AIzaSyCyVfsN9ihaglSFcP9SM-NQwdzlnFFOsys"
             console.log(this.state.searchHistory)
@@ -76,7 +82,7 @@ class MainContainer extends Component {
                 console.log(searchQueryResponse, "query response");
                 searchQueryResponse.items.map((item, idx) => {
                     // console.log(item);
-                    temp.push(item);
+                    return temp.push(item);
                 });
                 this.setState({ allResults: temp }, () => {
                     this.filteredItems(temp)
@@ -87,19 +93,9 @@ class MainContainer extends Component {
         }
 
     }
-    previewData = () => {
-        console.log(fullResponse, "whole JSON object")
-        console.log(fullResponse.items, "the items coming out of json ")
-        console.log(fullResponse.queries.request[0], "the first returned object from array Queries ") // meta information about the search // target all?
-        console.log(fullResponse.items[0].pagemap.cse_image[0].src) //url for the image
-        console.log(fullResponse.items[0].htmlTitle) //title of the page
-        console.log(fullResponse.items[0].link) //title of the page
-        console.log(fullResponse.items[0].snippet) //selection of the data)
-    }
     render() {
         return (
             <div>
-                <h1 className="hidden">This is the main container</h1>
                 <RenderRock />
                 {this.state.resultsLoaded === true ? <ResultIndex className="Resultsindex-wrapper" filteredResults={this.state.chosenResults} /> : null}
                 <FooterNav searchSubmit={this.handleSearchSubmit} />
@@ -110,5 +106,4 @@ class MainContainer extends Component {
 
 export default MainContainer;
 
-// searchSubmit={this.handleSearchSubmit}
 
