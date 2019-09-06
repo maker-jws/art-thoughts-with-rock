@@ -4,7 +4,6 @@ import "./App.css";
 import MainContainer from "./Components/MainContainer/index"
 import CanvasBG from './Components/CanvasBG/index';
 
-
 class App extends Component {
   constructor(props) {
     super(props);

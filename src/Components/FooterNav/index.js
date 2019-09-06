@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 class FooterNav extends Component {
     constructor(props) {
         super(props);
@@ -28,17 +29,33 @@ class FooterNav extends Component {
         const searchStyle = {
             margin: "0 2rem",
             padding: "0 1rem",
-            border: "0",
-            fontHeight: "2rem"
+            border: "none",
+            lineHeight: "3rem",
+            width: "250px",
+            boxShadow: "0 0 2rem darkgray",
+        }
+        const buttonStyle = {
+            backgroundColor: "black",
+            color: "white",
+            fontSize: "16px",
+            border: "none",
+            lineHeight: "2rem",
+            padding: "0 3rem",
+            boxShadow: "0 0 1rem darkgray",
         }
         return (
-            <footer className="App-footer">
-                <form style={searchFormStyle} onSubmit={this.handleSearchSubmit}>
-                    <input style={searchStyle} type="text" name="searchQuery" value={this.state.searchQuery} onChange={this.handleChange} />
-                    <button type="submit" name="search-button">search topic</button>
-                </form>
-            </footer>);
+            <div>
+                <footer className="App-footer">
+                    <form style={searchFormStyle} onSubmit={this.handleSearchSubmit}>
+                        <input style={searchStyle} type="text" name="searchQuery" value={this.state.searchQuery} onChange={this.handleChange} />
+                        <button className="buttonStyle" type="submit" name="search-button">search topic</button>
+                        <button className="buttonStyle">Test Button</button>
+                    </form>
+                </footer>
+
+            </div>
+        );
     }
 }
-
+// style={buttonStyle}
 export default FooterNav;

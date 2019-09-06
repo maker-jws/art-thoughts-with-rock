@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import RenderRock from '../RenderRock/index'
 import ResultIndex from '../ResultIndex';
 import FooterNav from "../FooterNav/index";
+import { thisExpression } from '@babel/types';
 const languageParser = require('./languageparser.js');
 class MainContainer extends Component {
     constructor(props) {
@@ -23,7 +24,11 @@ class MainContainer extends Component {
                 searchHistory: [...this.state.searchHistory, query],
                 lastSearch: query
             }, () => {
-                languageParser(query);
+                const filteredResults = languageParser(query);
+                console.log(filteredResults);
+                this.setState({ parsedSearch: { ...filteredResults } }, () => {
+                    this.retrieveItems();
+                })
                 //r.set("searchHistory")
             })
         }
@@ -36,15 +41,12 @@ class MainContainer extends Component {
         const temp = []
         try {
             for (let i = 0; i < 3; i++) {
-                let index = Math.floor(Math.random() * source.length);
-                // console.log(index)
-                temp.push(source[index])
+                temp.push(source[i])
             }
             this.setState({
                 chosenResults: [...temp],
                 resultsLoaded: true,
             }, () => {
-                // console.log('filtered results loaded')
                 console.log('this.state.chosenResults', this.state.chosenResults)
             })
         } catch (err) {
@@ -63,8 +65,18 @@ class MainContainer extends Component {
     }
     retrieveItems = async () => {
         try {
-            //const q = this.state.parsedSearch (object)
-            const q = this.state.searchHistory[this.state.searchHistory.length - 1]
+            //randomQuery 
+            let q;
+            if (this.state.parsedSearch.targetStrings.length === 0) {
+                if (this.state.lastSearch !== "") {
+                    q = this.state.lastSearch;
+                }
+                else {
+                    q = "random, conceptual, art, video";
+                }
+            } else {
+                q = this.state.parsedSearch.targetStrings[0];
+            }
             const api_key = "AIzaSyCyVfsN9ihaglSFcP9SM-NQwdzlnFFOsys"
             console.log(this.state.searchHistory)
             const responseQuery = await fetch("https://www.googleapis.com/customsearch/v1?key=" + api_key + "&cx=013070184471859259983%3Aakjlb1b5hvu&q=" + q, {

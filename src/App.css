@@ -26,6 +26,15 @@
 .App-link {
   color: #61dafb;
 }
+.App-button{
+  background-color: "black";
+  color: "white";
+  font-size: "16px";
+  border: "none";
+  line-height: "2rem";
+  padding: "0 3rem";
+  box-shadow: "0 0 1rem darkgray";
+}
 .App-main{
   height: 100%;
 }
@@ -39,7 +48,6 @@
   /* align-items: center; */
   justify-content: center;
   font-size: calc(14pt + 2vmin);
-  color: white;
 }
 .Canvas-BG-grad{
   position: fixed;
@@ -61,7 +69,15 @@
   /* background: rgba(255, 255, 255, 1);  */
   margin-top: 10vh;
 }
-
+.buttonStyle{
+  background-color: "black";
+  color: "white";
+  font-size: "16px";
+  border: "none";
+  line-height: "2rem";
+  padding: "0 3rem";
+  box-shadow: "0 0 1rem darkgray";
+}
 .ResultsIndex-card{
   padding: "0";
   height: "350px";
