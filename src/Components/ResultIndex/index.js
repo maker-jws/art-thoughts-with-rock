@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-
 class ResultIndex extends Component {
     constructor(props) {
         super(props);
@@ -36,7 +35,7 @@ class ResultIndex extends Component {
             minHeight: "350px",
             maxHeight: "450px",
             width: "350px",
-            border: "red 1px solid",
+            border: "rgba(255,255,255,.8) 1px solid",
             boxSizing: "border-box",
             borderBottom: "4px solid white",
             zIndex: "25",
@@ -45,10 +44,12 @@ class ResultIndex extends Component {
             textAlign: "center",
             backgroundColor: 'lightgray',
             margin: "1rem",
+            listStyle: "none",
+            borderRadius: ".2rem"
         }
         //pass all of the cards in from props 
         const results = this.state.filteredResults.map((result, i) => {
-            console.log(result, i)
+            // console.log(result, i)
             return (<ul style={cardStyle}>
                 <li>
                     <h1>{result.title}</h1>
@@ -73,11 +74,20 @@ class ResultIndex extends Component {
             display: 'flex',
             flexDirection: 'row',
             flexWrap: 'wrap',
+            paddingLeft: "2rem"
         }
+        const resultsLabel = {
+            paddingLeft: "3rem",
+            textAlign: "start",
+            fontSize: "3rem",
+            fontWeight: "200",
+            fontStyle: "italic",
+            color: "rgba(255,255,255,.8)"
 
+        }
         return (
             <div style={resultsWrapperStyle}>
-                <label>Results</label>
+                <label style={resultsLabel}>What I found...</label>
                 <div style={rowStyle}>{this.state.resultsHaveLoaded === true ? this.getAllCards() : null}</div>
             </div>
         );

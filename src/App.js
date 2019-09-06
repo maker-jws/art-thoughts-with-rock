@@ -2,9 +2,7 @@ import React, { Component } from "react";
 // import logo from "./logo.svg";
 import "./App.css";
 import MainContainer from "./Components/MainContainer/index"
-// import Navbar from "./Components/Navbar/index"
 import CanvasBG from './Components/CanvasBG/index';
-
 
 class App extends Component {
   constructor(props) {
@@ -18,12 +16,7 @@ class App extends Component {
   }
   componentDidMount() {
     console.log("Main Container Loaded")
-    // this.previewData(); 
-  }
-  componentDidUpdate = () => {
-    if (this.prevState !== this.state.searchHistory) {
-      console.log("something is different")
-    }
+
   }
   onClicked = (x, y) => {
     this.setState({
@@ -46,7 +39,6 @@ class App extends Component {
       </div>);
   }
 }
-
 export default App;
 
 
