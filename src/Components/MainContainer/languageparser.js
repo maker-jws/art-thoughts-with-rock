@@ -38,18 +38,14 @@ function parseQuery(string) {
         rawString = rawString.toLowerCase();
         console.log(rawString)
         for (let k = 0; k < rawString.length; k++) {
-            //replace special characters for matching
-
             if (rawString[k] === "$" || rawString[k] === "&" || rawString[k] === "(" || rawString[k] === ")" || rawString[k] === ";") {
                 const previousPosition = k
                 const character = rawString[k]
                 parsedString.specialCharacters.push([previousPosition, character])
                 rawString = rawString.replace(rawString[k], "");
-
             } else if (rawString[k] === "?") {
                 parsedString.isQuestion = true
                 rawString = rawString.replace(rawString[k], "");
-
             } else if (rawString[k] === `"` || rawString[k] === `'`) {
                 const quotePosition = k
                 const character = rawString[k]
@@ -68,27 +64,27 @@ function parseQuery(string) {
         pStr.wordsArray = pStr.filteredString.split(" ") //non destructive array 
         pStr.firstWord = pStr.wordsArray[0]
         pStr.firstThree = [pStr.wordsArray[0], pStr.wordsArray[1], pStr.wordsArray[2]] //
-        console.log(parsedString)
+        // console.log(pStr, 'parsedString in process')
         const list = testProcess //array 
         const source = pStr.wordsArray
         for (let n = 0; n < source.length; n++) {
             for (let p = 0; p < list.length; p++) {
                 if (source[n] === list[p]) {
                     pStr.targetStrings.push(source[n])
-                    console.log(source[n])
+                    // console.log(source[n])
                     source.splice(n, 1);
-                    //could remove from array
+                    //could remove from words array 
                 }
                 //later use regex - https://www.w3schools.com/js/js_regexp.asp
             }
         }
-        console.log(pStr);
+        // console.log(pStr);
     }
     function gatherSentiment() {
         console.log("gatherSentiment");
     }
 
-    gatherSentiment();
+    // gatherSentiment();
     preFilterProcess();
     console.log(parsedString)
     return parsedString;

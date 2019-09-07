@@ -73,7 +73,7 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  padding-left: 2rem;
+  padding: 0 2rem;
   margin-top: 3rem;
 }
 .Results-header-label{
@@ -148,7 +148,16 @@
     transform: rotate(360deg);
   }
 }
-
+.Rock-image{
+  max-width: 400px;
+  max-height: 400px;
+  min-height: 300px;
+  min-height: 300px;
+  position: absolute;
+  bottom: 2%;
+  left: 40%;
+  z-index: 150;
+}
 .hidden{
   display: none;
 }

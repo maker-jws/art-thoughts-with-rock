@@ -20,26 +20,12 @@ class RenderRock extends Component {
             ]
         }
     }
-    // rockItem = (num) => {
-    //     console.log(allRocks[num])
-    //     return allRocks[num]
-    // }
 
-    imgStyle = {
-        width: "400px",
-        height: "400px",
-        position: "absolute",
-        bottom: '2%',
-        left: '40%',
-        zIndex: '150'
-    }
     getSomeRocks = (items, count) => {
         let choices = [];
         for (let r = 0; r < count; r++) {
             let index = Math.floor(Math.random() * items.length)
             let choice = items[index];
-            // console.log(index, 'choice', choice, 'chosen Item');
-            // console.log(choices)
             choices.push(choice);
         }
         return choices;
@@ -47,10 +33,9 @@ class RenderRock extends Component {
     render() {
         return (
             <div>
-
-                < img alt="a rock" src={rock0} style={this.imgStyle} />
-                <img alt="a rock" src={rock1} style={this.imgStyle} />
-                <img alt="a rock" src={rock2} style={this.imgStyle} />
+                <img className="Rock-image" alt="a rock" src={rock0} />
+                <img className="Rock-image" alt="a rock" src={rock1} />
+                <img className="Rock-image" alt="a rock" src={rock2} />
             </div >
 
         );
@@ -58,6 +43,3 @@ class RenderRock extends Component {
 }
 
 export default RenderRock;
-
-// // const theRocks = this.getSomeRocks(this.state.allRocks, 3);
-        // console.log(theRocks, 'the rocks inside render')

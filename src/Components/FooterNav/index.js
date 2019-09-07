@@ -11,13 +11,11 @@ class FooterNav extends Component {
     handleSearchSubmit = (e) => {
         e.preventDefault();
         const query = this.state.searchQuery;
-        // console.log(query, 'inside Footer Nav');
         this.props.searchSubmit(query);
         this.setState({ searchQuery: "" });
     }
     handleChange = (e) => {
         this.setState({ [e.currentTarget.name]: e.currentTarget.value });
-        // console.log(this.state.searchQuery)
     }
     render() {
         const searchFormStyle = {
