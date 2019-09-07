@@ -20,6 +20,7 @@ class MainContainer extends Component {
             resultsToRender: [],
             search_num: 0,
             user_id: 0,
+            displayCount: 5,
         }
     }
     handleSearchSubmit = async (query) => {
@@ -56,6 +57,24 @@ class MainContainer extends Component {
                 user_id: this.state.user_id,
             }
             console.log(queryPackage, "after establishing content - line 58 -MainContainer")
+            const createQueryResponse = await fetch("http://localhost:8000/data/v1/", {
+                method: "POST",
+                credentials: "include",
+                body: JSON.stringify(queryPackage),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            const queryResponse = await createQueryResponse.json();
+            console.log(
+                queryResponse,
+                "parsed response",
+                "<<<successful created event", "trigger setState"
+            );
+            this.setState({
+                requestQuery: { ...queryResponse.data }
+            })
+            return queryResponse;
         } catch (err) {
             console.log(err)
         }
@@ -70,7 +89,7 @@ class MainContainer extends Component {
         console.log(source, 'all results at beginning of filteredItems')
         const temp = []
         try {
-            for (let i = 0; i < 3; i++) {
+            for (let i = 0; i < this.state.displayCount; i++) {
                 temp.push(source[i])
             }
             this.setState({

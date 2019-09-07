@@ -48,8 +48,7 @@ class FooterNav extends Component {
                 <footer className="App-footer">
                     <form style={searchFormStyle} onSubmit={this.handleSearchSubmit}>
                         <input style={searchStyle} type="text" name="searchQuery" value={this.state.searchQuery} onChange={this.handleChange} />
-                        <button className="buttonStyle" type="submit" name="search-button">search topic</button>
-                        <button className="buttonStyle">Test Button</button>
+                        <button style={buttonStyle} type="submit" name="search-button">search topic</button>
                     </form>
                 </footer>
 
@@ -57,5 +56,6 @@ class FooterNav extends Component {
         );
     }
 }
+// 
 // style={buttonStyle}
 export default FooterNav;
