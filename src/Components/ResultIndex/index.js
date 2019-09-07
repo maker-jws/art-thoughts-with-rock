@@ -41,7 +41,7 @@ class ResultIndex extends Component {
                     <div className="Results-card-body">
                         <p>{result.snippet}</p>
                     </div>
-                    <button className="Results-card-button" onClick={() => { console.log(result) }}>Select</button>
+                    <button className="Results-card-button" onClick={() => { this.props.handleSelection(result) }}>Select</button>
                 </li>
             </ul>)
         })
