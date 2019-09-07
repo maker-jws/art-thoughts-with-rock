@@ -4,10 +4,11 @@ class ResultIndex extends Component {
         super(props);
         this.state = {
             resultsHaveLoaded: false,
-            filteredResults: []
+            filteredResults: [],
         };
     }
     componentDidMount() {
+        console.log(this.state, "state at start of componentDidMount - results index")
         if (this.state.filteredResults !== this.props.filteredResults) {
             this.setState({
                 filteredResults: [...this.props.filteredResults],
@@ -40,19 +41,31 @@ class ResultIndex extends Component {
                     <div className="Results-card-body">
                         <p>{result.snippet}</p>
                     </div>
-
                     <button className="Results-card-button" onClick={() => { console.log(result) }}>Select</button>
                 </li>
             </ul>)
         })
         return results;
     }
-
+    handleNextItems = (e) => {
+        e.preventDefault()
+        this.props.getNextItems();
+    }
+    handlePreviousItems = (e) => {
+        e.preventDefault()
+        this.props.getPrevItems();
+    }
     render() {
         return (
             <div className="Results-wrapper">
                 <label className="Results-header-label" >What I found...</label>
-                <div className="ResultsIndex-row">{this.state.resultsHaveLoaded === true ? this.getAllCards() : null}</div>
+                <div className="ResultsIndex-row">
+                    <div><button onClick={this.handlePreviousItems}>Previous</button></div>
+                    <div className="ResultsIndex-row">{this.state.resultsHaveLoaded === true ? this.getAllCards() : null}</div>
+                    <div><button onClick={this.handleNextItems}>Next</button></div>
+                </div>
+
+
             </div>
         );
     }

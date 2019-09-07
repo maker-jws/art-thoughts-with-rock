@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import RenderRock from '../RenderRock/index'
 import ResultIndex from '../ResultIndex';
 import FooterNav from "../FooterNav/index";
-import { thisExpression } from '@babel/types';
+import Navbar from "../Navbar/index"
 const languageParser = require('./languageparser.js');
 class MainContainer extends Component {
     constructor(props) {
@@ -20,14 +20,16 @@ class MainContainer extends Component {
             resultsToRender: [],
             search_num: 0,
             user_id: 0,
-            displayCount: 5,
+            currentPosition: 0,
+            currentLimit: 3,
         }
     }
     handleSearchSubmit = async (query) => {
         try {
             this.setState({
                 searchHistory: [...this.state.searchHistory, query],
-                lastSearch: query
+                lastSearch: query,
+                chosenResults: []
             }, () => {
                 const filteredResults = languageParser(query);
                 console.log(filteredResults);
@@ -41,8 +43,6 @@ class MainContainer extends Component {
             console.log(err)
         }
     }
-    // requestQuery: {}, //the keys to be sent to db for 'Data'
-    // requestResultsUrl: {},
     reqQuery = async (source) => {
         try {
             // console.log('source in reqQuery', source);
@@ -85,25 +85,22 @@ class MainContainer extends Component {
             console.log(err)
         }
     }
-    filteredItems = async (source) => {
-        console.log(source, 'all results at beginning of filteredItems')
+    filteredItems = async (source, start, quantity) => {
+        console.log(source, 'all results at beginning of filteredItems', start, quantity)
         const temp = []
         try {
-            for (let i = 0; i < this.state.displayCount; i++) {
+            for (let i = start; i < quantity; i++) {
                 temp.push(source[i])
             }
             this.setState({
                 chosenResults: [...temp],
                 resultsLoaded: true,
             }, () => {
-                console.log('this.state.chosenResults', this.state.chosenResults)
+                console.log('this.state.chosenResults afterState is Set', this.state.chosenResults)
             })
         } catch (err) {
             console.log(err);
         }
-    }
-    nextItem() {
-        console.log('this will choose the next ten results ')
     }
     targetResponse = async () => {
         try {
@@ -111,6 +108,76 @@ class MainContainer extends Component {
         } catch (err) {
             console.log(err)
         }
+    }
+    getNextItems = async () => {
+        try {
+            if (this.state.currentPosition + 3 < this.state.allResults.length - 3) {
+                this.setState({
+                    currentPosition: this.state.currentPosition + 3,
+                    currentLimit: this.state.currentLimit + 3
+                }, () => {
+                    let newPosition = this.state.currentPosition
+                    const nextResults = this.filteredItems(this.state.allResults, newPosition, this.state.currentLimit)
+                    return nextResults
+                })
+            } else if (this.state.currentPosition + 1 < this.state.allResults.length - 2) {
+                this.setState({
+                    currentPosition: this.state.currentPosition + 1,
+                    currentLimit: this.state.currentLimit + 1
+                }, () => {
+                    let newPosition = this.state.currentPosition
+                    const nextResults = this.filteredItems(this.state.allResults, newPosition, this.state.currentLimit)
+                    return nextResults
+                })
+            } else {
+                this.setState({
+                    currentPosition: 0,
+                    currentLimit: 3
+                }, () => {
+                    let newPosition = this.state.currentPosition
+                    const nextResults = this.filteredItems(this.state.allResults, newPosition, this.state.currentLimit)
+                    return nextResults
+                })
+            }
+        } catch (err) {
+            console.log(err)
+        }
+
+    }
+    getPrevItems = async () => {
+        try {
+            if (this.state.currentPosition - 3 >= 0) {
+                this.setState({
+                    currentPosition: this.state.currentPosition - 3,
+                    currentLimit: this.state.currentLimit - 3
+                }, () => {
+                    let newPosition = this.state.currentPosition
+                    const nextResults = this.filteredItems(this.state.allResults, newPosition, this.state.currentLimit)
+                    return nextResults
+                })
+            } else if (this.state.currentPosition - 1 >= 0) {
+                this.setState({
+                    currentPosition: this.state.currentPosition - 1,
+                    currentLimit: this.state.currentLimit - 1
+                }, () => {
+                    let newPosition = this.state.currentPosition
+                    const nextResults = this.filteredItems(this.state.allResults, newPosition, this.state.currentLimit)
+                    return nextResults
+                })
+            } else {
+                this.setState({
+                    currentPosition: 0,
+                    currentLimit: 3
+                }, () => {
+                    let newPosition = this.state.currentPosition
+                    const nextResults = this.filteredItems(this.state.allResults, newPosition, this.state.currentLimit)
+                    return nextResults
+                })
+            }
+        } catch (err) {
+            console.log(err)
+        }
+
     }
     retrieveItems = async () => {
         try {
@@ -140,17 +207,20 @@ class MainContainer extends Component {
             } else {
                 const temp = [];
                 const searchQueryResponse = await responseQuery.json();
+                if (parseInt(searchQueryResponse.searchInformation.totalResults) !== 0) {
+                    this.reqQuery(searchQueryResponse);
+                    searchQueryResponse.items.map((item, idx) => {
+                        // console.log(item);
+                        return temp.push(item);
+                    });
+                    this.setState({ allResults: temp }, () => {
+                        this.filteredItems(temp, this.state.currentPosition, this.state.currentLimit);
+                        this.reqResultsUrl(temp);
+                        //call function that sends all urls to 
+                    })
+                }
                 // console.log(searchQueryResponse, "query response");
-                this.reqQuery(searchQueryResponse);
-                searchQueryResponse.items.map((item, idx) => {
-                    // console.log(item);
-                    return temp.push(item);
-                });
-                this.setState({ allResults: temp }, () => {
-                    this.filteredItems(temp);
-                    this.reqResultsUrl(temp);
-                    //call function that sends all urls to 
-                })
+
             }
         } catch (err) {
             console.log(err, "Fetch Error");
@@ -160,8 +230,9 @@ class MainContainer extends Component {
     render() {
         return (
             <div>
+                <Navbar />
                 <RenderRock />
-                {this.state.resultsLoaded === true ? <ResultIndex className="Resultsindex-wrapper" filteredResults={this.state.chosenResults} /> : null}
+                {this.state.resultsLoaded === true ? <ResultIndex className="Resultsindex-wrapper" getPrevItems={this.getPrevItems} getNextItems={this.getNextItems} filteredResults={this.state.chosenResults} /> : null}
                 <FooterNav searchSubmit={this.handleSearchSubmit} />
             </div>
         );
