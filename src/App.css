@@ -27,13 +27,13 @@
   color: #61dafb;
 }
 .App-button{
-  background-color: "black";
-  color: "white";
-  font-size: "16px";
-  border: "none";
-  line-height: "2rem";
-  padding: "0 3rem";
-  box-shadow: "0 0 1rem darkgray";
+  background-color: black;
+  color: white;
+  font-size: 16px;
+  border: none;
+  line-height: 2rem;
+  padding: 0 3rem;
+  box-shadow: 0 0 1rem darkgray;
 }
 .App-main{
   height: 100%;
@@ -49,49 +49,97 @@
   justify-content: center;
   font-size: calc(14pt + 2vmin);
 }
+.buttonStyle{
+  background-color: black;
+  color: white;
+  font-size: 16px;
+  border: none;
+  line-height: 2rem;
+  padding: 0 3rem;
+  box-shadow: 0 0 1rem darkgray;
+}
 .Canvas-BG-grad{
   position: fixed;
   top: 0;
   left: 0;
   z-index: -10;
 }
-.ResultIndex-wrapper{
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 20;
-  background: rgba(255, 255, 255, 0); 
+.Results-wrapper{
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
 }
 .ResultsIndex-row{
-  display: 'flex';
-  flex-direction: 'row';
-  /* flex-wrap: 'wrap'; */
-  /* background: rgba(255, 255, 255, 1);  */
-  margin-top: 10vh;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding-left: 2rem;
+  margin-top: 3rem;
 }
-.buttonStyle{
-  background-color: "black";
-  color: "white";
-  font-size: "16px";
-  border: "none";
-  line-height: "2rem";
-  padding: "0 3rem";
-  box-shadow: "0 0 1rem darkgray";
+.Results-header-label{
+  padding-left: 3rem;
+  text-align: start;
+  font-size: calc(24pt + .2rem);
+  font-weight: 200;
+  font-style: italic;
+  color: rgba(255, 255, 255, .7)
 }
-.ResultsIndex-card{
-  padding: "0";
-  height: "350px";
-  width: "350px";
-  border: "red 1px solid";
-  box-sizing: "border-box";
-  border-bottom: "4px solid white";
-  z-index: "25";
-  top: "10%";
-  box-shadow: "0 0 20px rgba(0 0 0 .2)";
-  text-align: "center";
-  background-color: 'lightgray';
+.Results-index-card{
+  padding: 0;
+  max-width: 350px;
+  min-width: 150px;
+  min-height: 300px;
+  list-style: none;
+  box-sizing: border-box;
+  text-align: center;
+  background-color: lightgray;
+  border-bottom: 4px solid white;
+  border: rgba(255, 255, 255, .8) 1px solid;
+  box-shadow: 0 0 20px rgba(0 0 0 .2);
+  z-index: 25;
+  margin: .6rem;
+  border-radius: .2rem;
 }
 
+.Results-card-header{
+  min-height: 100px;
+  max-height: 100px;
+  font-size: 16pt;
+  font-style: bolder;
+  font-weight: 600;
+  overflow: hidden;
+  background: rgba(150, 150, 150, .7);
+  padding: 1.3rem 1.3rem 0 1.3rem;
+  border: 0;
+}
+.Results-card-body{
+  font-family: arial;
+  text-align: justify;
+  margin: 0 1.3rem;
+  line-height: 16pt;
+  font-weight: 300;
+  overflow: ellipse;
+  max-height: 110px;
+  min-height: 110px;
+}
+.Results-card-button{
+  background-color: rgba(0, 0, 0, 0.70);
+  color: white;
+  font-size: 12pt;
+  border: none;
+  line-height: 2.2rem;
+  padding: 0 1.6rem;
+  border-radius: .3rem;
+  text-align: center;
+  margin: 0 auto;
+  bottom: 2%;
+}
+.Results-card-button:active{
+  background-color: rgba(0, 0, 0, .9);
+}
+.Results-card-button:hover{
+  background-color: rgba(0, 0, 0, .6);
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

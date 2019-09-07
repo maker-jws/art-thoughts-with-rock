@@ -30,34 +30,18 @@ class ResultIndex extends Component {
         }
     }
     getAllCards = () => {
-        const cardStyle = {
-            padding: "0",
-            minHeight: "350px",
-            maxHeight: "450px",
-            width: "350px",
-            border: "rgba(255,255,255,.8) 1px solid",
-            boxSizing: "border-box",
-            borderBottom: "4px solid white",
-            zIndex: "25",
-            top: "10%",
-            boxShadow: "0 0 20px rgba(0 0 0 .2)",
-            textAlign: "center",
-            backgroundColor: 'lightgray',
-            margin: "1rem",
-            listStyle: "none",
-            borderRadius: ".2rem"
-        }
         //pass all of the cards in from props 
         const results = this.state.filteredResults.map((result, i) => {
-            // console.log(result, i)
-            return (<ul style={cardStyle}>
+            return (<ul key={i} className="Results-index-card">
                 <li>
-                    <h1>{result.title}</h1>
-                    <label>Summary:</label>
-                    <hr />
-                    <p>{result.snippet}</p>
-                    <button onClick={() => { console.log(result) }}>Select</button>
+                    <div className="Results-card-header">
+                        <label>{result.title}</label>
+                    </div>
+                    <div className="Results-card-body">
+                        <p>{result.snippet}</p>
+                    </div>
 
+                    <button className="Results-card-button" onClick={() => { console.log(result) }}>Select</button>
                 </li>
             </ul>)
         })
@@ -65,30 +49,10 @@ class ResultIndex extends Component {
     }
 
     render() {
-        const resultsWrapperStyle = {
-            display: 'flex',
-            flexDirection: 'column',
-            marginTop: "10vh",
-        }
-        const rowStyle = {
-            display: 'flex',
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            paddingLeft: "2rem"
-        }
-        const resultsLabel = {
-            paddingLeft: "3rem",
-            textAlign: "start",
-            fontSize: "3rem",
-            fontWeight: "200",
-            fontStyle: "italic",
-            color: "rgba(255,255,255,.8)"
-
-        }
         return (
-            <div style={resultsWrapperStyle}>
-                <label style={resultsLabel}>What I found...</label>
-                <div style={rowStyle}>{this.state.resultsHaveLoaded === true ? this.getAllCards() : null}</div>
+            <div className="Results-wrapper">
+                <label className="Results-header-label" >What I found...</label>
+                <div className="ResultsIndex-row">{this.state.resultsHaveLoaded === true ? this.getAllCards() : null}</div>
             </div>
         );
     }
