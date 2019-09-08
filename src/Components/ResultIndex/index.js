@@ -15,7 +15,6 @@ class ResultIndex extends Component {
                 resultsHaveLoaded: true
             }, () => {
                 this.getAllCards();
-                console.log(this.state.filteredList, 'called from inside componentDidMount')
             })
         }
     }
@@ -26,12 +25,12 @@ class ResultIndex extends Component {
                 resultsHaveLoaded: true
             }, () => {
                 this.getAllCards();
-                console.log(this.state.filteredList, 'called from inside componentDidMount')
             })
         }
     }
     getAllCards = () => {
         //pass all of the cards in from props 
+        // console.log(this.props.filteredResults, 'called from inside GetAllCards')
         const results = this.state.filteredResults.map((result, i) => {
             return (<ul key={i} className="Results-index-card">
                 <li>

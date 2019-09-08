@@ -8,21 +8,21 @@ class MainContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            lastSearch: "",
             searchHistory: [],
+            defaultExclusions: "pinterest+artnews+imgur+etsy+poster\-art",
             parsedSearch: {},
+            nullResults: false,
             requestQuery: {}, //the keys to be sent to db for 'Data'
             requestResultsUrl: {}, //the keys to be sent to db for 'Source'
-            lastSearch: "",
-            allResults: [],
-            chosenResults: [],
             resultsLoaded: false,
             resultsLoading: false,
-            resultsToRender: [],
+            allResults: [],
+            chosenResults: [],
             search_num: 0,
             user_id: 0,
             currentPosition: 0,
             currentLimit: 3,
-            nullResults: false,
             selectedCards: []
         }
     }
@@ -37,7 +37,7 @@ class MainContainer extends Component {
                 const filteredResults = languageParser(query);
                 console.log(filteredResults);
                 this.setState({ parsedSearch: { ...filteredResults } }, () => {
-                    this.retrieveItems();
+                    this.retrieveItems(this.state.currentPosition + 1);
                 })
                 //r.set("searchHistory")
             })
@@ -70,7 +70,7 @@ class MainContainer extends Component {
                 }
             }
             console.log(selectedPackage, "after establishing content - handleCardSelection")
-            const createSelectedResponse = await fetch("http://localhost:8000/selected/v1/", {
+            const createSelectedResponse = await fetch("http://localhost:8000/select/v1/", {
                 method: "POST",
                 credentials: "include",
                 body: JSON.stringify(selectedPackage),
@@ -129,33 +129,68 @@ class MainContainer extends Component {
         }
     }
     reqResultsUrl = async (source) => {
-        try { console.log('source in reqResultsUrl', source) }
+        try {
+            let temp = []
+            const sourcePackage = {
+                base_url: { temp },
+                search_num: this.state.search_num,
+                initial_value: 0, //will be calculated on backend when search fetch is migrated
+                query_string: this.state.parsedSearch.filteredString,
+                search_num: this.state.search_num
+            }
+            // console.log('source in reqResultsUrl', source)
+            const allUrls = this.state.allResults.map((result) => {
+                if (result.link !== "") {
+                    const result_url = {
+                        cached_ID: result.cacheId,
+                        0: result.link,
+                        1: result.formattedUrl
+                    }
+                    temp.push(result_url);
+                    // console.log(temp, sourcePackage);
+                }
+            })
+
+            const createSourceResponse = await fetch("http://localhost:8000/source/v1/", {
+                method: "POST",
+                credentials: "include",
+                body: JSON.stringify(sourcePackage),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            const sourceResponse = await createSourceResponse.json();
+            // console.log(
+            //     sourceResponse,
+            //     "parsed response",
+            //     "<<<successful created event", "trigger setState"
+            // );
+            this.setState({
+                requestResultsUrl: { ...sourceResponse.data }
+            })
+            return sourceResponse;
+        }
         catch (err) {
             console.log(err)
         }
     }
     filteredItems = async (source, start, quantity) => {
-        console.log(source, 'all results at beginning of filteredItems', start, quantity)
+        // console.log(source, 'all results at beginning of filteredItems', start, quantity)
         const temp = []
         try {
             for (let i = start; i < quantity; i++) {
-                temp.push(source[i])
+                if (source[i].title !== "") {
+                    temp.push(source[i])
+                }
             }
             this.setState({
                 chosenResults: [...temp],
                 resultsLoaded: true,
             }, () => {
-                console.log('this.state.chosenResults afterState is Set', this.state.chosenResults)
+                // console.log('this.state.chosenResults afterState is Set', this.state.chosenResults)
             })
         } catch (err) {
             console.log(err);
-        }
-    }
-    targetResponse = async () => {
-        try {
-            console.log("targetResponse Ran")
-        } catch (err) {
-            console.log(err)
         }
     }
     getNextItems = async () => {
@@ -178,20 +213,10 @@ class MainContainer extends Component {
                     const nextResults = this.filteredItems(this.state.allResults, newPosition, this.state.currentLimit)
                     return nextResults
                 })
-            } else {
-                this.setState({
-                    currentPosition: 0,
-                    currentLimit: 3
-                }, () => {
-                    let newPosition = this.state.currentPosition
-                    const nextResults = this.filteredItems(this.state.allResults, newPosition, this.state.currentLimit)
-                    return nextResults
-                })
             }
         } catch (err) {
             console.log(err)
         }
-
     }
     getPrevItems = async () => {
         try {
@@ -228,24 +253,36 @@ class MainContainer extends Component {
         }
 
     }
-    retrieveItems = async () => {
+    retrieveItems = async (start) => {
         try {
             //randomQuery 
+            let api_key = "AIzaSyA2x18slfQC5210EaI_tcMGCkP8vd5wqvE";
+            let cx = "013070184471859259983%3Aakjlb1b5hvu";
             let q;
-            let api_key = "AIzaSyA2x18slfQC5210EaI_tcMGCkP8vd5wqvE"
-            //put credential swap on rotating basis (if 0 key=xxx if 1 ===xxx 2 xxxx reset to zero)
+
+            let exactTerms
+            if (this.state.parsedSearch.filteredString !== "") {
+                exactTerms = this.state.parsedSearch.targetStrings.join("+")
+
+            } else {
+                exactTerms = "art"
+            }
+            const excludeTerms = this.state.defaultExclusions
+            const customQ = "&start=" + start + "&exactTerms=" + exactTerms + "&excludeTerms=" + excludeTerms + "&alt=json"
             if (this.state.parsedSearch.targetStrings.length === 0) {
                 if (this.state.lastSearch !== "") {
-                    q = this.state.lastSearch;
+                    q = this.state.parsedSearch.filteredString;
                 }
                 else {
                     q = "random, conceptual, art, video";
                 }
             } else {
-                q = this.state.parsedSearch.targetStrings[0];
+                q = this.state.parsedSearch.targetStrings[0];  //this is where formatting has to occur
             }
-            // console.log(this.state.searchHistory)
-            const responseQuery = await fetch("https://www.googleapis.com/customsearch/v1?key=" + api_key + "&cx=013070184471859259983%3Aakjlb1b5hvu&q=" + q, {
+            const searchQuery = "https://www.googleapis.com/customsearch/v1?key=" + api_key + "&cx=" + cx + "&q=" + "'" + q + "'" + customQ
+            console.log(searchQuery)
+            //actual api call 
+            const responseQuery = await fetch(searchQuery, {
                 method: "GET",
                 credentials: "include",
                 headers: {
