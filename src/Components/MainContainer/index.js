@@ -199,7 +199,18 @@ class MainContainer extends Component {
     }
     getNextItems = async () => {
         try {
-            if (this.state.currentPosition + 3 < this.state.allResults.length - 3) {
+            console.log(this.state.currentPosition, this.state.currentLimit, this.state.allResults.length);
+            if (this.state.currentLimit + 1 === this.state.allResults.length) {
+                this.retrieveItems(this.state.currentPosition + 1)
+                this.setState({
+                    currentPosition: this.state.currentPosition + 1,
+                    currentLimit: this.state.currentLimit + 1
+                }, () => {
+                    let newPosition = this.state.currentPosition
+                    const nextResults = this.filteredItems(this.state.allResults, newPosition, this.state.currentLimit)
+                    return nextResults
+                })
+            } else if (this.state.currentPosition + 3 < this.state.allResults.length - 3) {
                 this.setState({
                     currentPosition: this.state.currentPosition + 3,
                     currentLimit: this.state.currentLimit + 3
@@ -208,7 +219,8 @@ class MainContainer extends Component {
                     const nextResults = this.filteredItems(this.state.allResults, newPosition, this.state.currentLimit)
                     return nextResults
                 })
-            } else if (this.state.currentPosition + 1 < this.state.allResults.length - 2) {
+            }
+            else if (this.state.currentPosition + 1 < this.state.allResults.length - 2) {
                 this.setState({
                     currentPosition: this.state.currentPosition + 1,
                     currentLimit: this.state.currentLimit + 1
@@ -310,7 +322,7 @@ class MainContainer extends Component {
                         }
                     });
                     this.setState({
-                        allResults: temp,
+                        allResults: [...this.state.allResults, ...temp],
                         nullResults: !this.state.nullResults
                     }, () => {
 
