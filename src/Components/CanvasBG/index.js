@@ -3,44 +3,66 @@ class CanvasBG extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            winWidth: this.props.winWidth,
+            winHeight: this.props.winHeight,
+            width: this.props.width,
+            height: this.props.height,
+            rotation: this.props.rotation,
         }
+        this.paintBG = this.paintBG.bind(this);
     }
-    // Create gradient
-    //animated gradient tutorial: http://jsfiddle.net/fkU4Q/
-    componentDidMount() {
+    paintBG() {
         const canvas = this.refs.canvas //targets the specific canvas
         const ctx = canvas.getContext("2d");
         // createRadialGradient(x,y,r,x1,y1,r1)
-        var grd = ctx.createRadialGradient(this.props.winWidth / 2, this.props.winHeight, 10, this.props.winWidth / 4, this.props.winHeight, this.props.winWidth);
+        const grd = ctx.createRadialGradient(this.props.winWidth / 2, this.props.winHeight, 10, this.props.winWidth / 4, this.props.winHeight, this.props.winWidth);
         grd.addColorStop(0, "darkgray");
         grd.addColorStop(1, "black");
         // Fill with gradient
         ctx.fillStyle = grd;
         ctx.fillRect(0, 0, this.props.winWidth, this.props.winHeight);
     }
-    updateBGSize() {
-        const newHeight = Math.floor(window.innerHeight)
-        const newWidth = Math.floor(window.innerHeight)
-        console.log(newHeight, newWidth)
-        this.setState({
-            winWidth: newWidth, //sets state of window so the canvas will always remain somewhat proportional and smaller than the whole window
-            winHeight: newHeight,
-        })
+
+    paintGraphic() {
+        const { width, height, rotation } = this.props;
+        const graphic = this.refs.graphic //targets the specific canvas
+        const ctx = graphic.getContext("2d");
+        ctx.clearRect(width / 2, height / 2, width / 2, height / 2)
+        ctx.save();
+        const grd = ctx.createRadialGradient(width / 2, height, 10, width / 4, height, width);
+        // ctx.translate(width / 2, height / 2);
+        ctx.rotate(rotation, width, height);
+        grd.addColorStop(0, "rgba(0,255,0,.2)");
+        grd.addColorStop(1, "rgba(255,0,0,.2)");
+        // Fill with gradient
+        ctx.fillStyle = grd;
+        ctx.fillRect(0, 0, this.props.winWidth * 2, this.props.winHeight * 2);
+        ctx.restore();
+    }
+
+    //animated gradient tutorial: http://jsfiddle.net/fkU4Q/
+
+    componentDidMount() {
+        this.paintBG();
+        this.paintGraphic();
+    }
+
+    componentDidUpdate() {
+        this.paintBG();
+        this.paintGraphic();
     }
     render() {
         const canvasStyle = {
             border: "1px solid black",
         };
+        const { winWidth, winHeight, height, width } = this.props;
         return (
-            <div className="Canvas-BG-grad">
-                {/* <p>Height: {this.props.winHeight}</p>
-                <p>Width: {this.props.winWidth}</p>
-                <p>Last Clicked: {this.props.clickedX}, {this.props.clickedY} </p> */}
-                <canvas width={this.props.winWidth} height={this.props.winHeight} style={canvasStyle} ref='canvas' onClick={(e) => {
-                    console.log(e.clientX)
-                    this.props.onClicked(e.clientX, e.clientY)  //passing up coordinates to main container
-                }}
+            <div>
+                <canvas className="Canvas-BG-graphic" ref="graphic" width={width} height={height} />
+                <canvas className="Canvas-BG-grad"
+                    ref="canvas"
+                    width={winWidth}
+                    height={winHeight}
                 />
             </div>
         );
@@ -48,3 +70,9 @@ class CanvasBG extends Component {
 }
 
 export default CanvasBG;
+
+// <canvas width={this.props.winWidth} height={this.props.winHeight} style={canvasStyle} ref='canvas' onClick={(e) => {
+//     console.log(e.clientX)
+//     this.props.onClicked(e.clientX, e.clientY)  //passing up coordinates to main container
+// }}
+// />

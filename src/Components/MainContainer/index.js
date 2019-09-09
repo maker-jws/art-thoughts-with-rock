@@ -3,7 +3,9 @@ import RenderRock from '../RenderRock/index'
 import ResultIndex from '../ResultIndex';
 import FooterNav from "../FooterNav/index";
 import Navbar from "../Navbar/index"
+import ResultsShow from "../ResultsShow/index"
 const languageParser = require('./languageparser.js');
+
 class MainContainer extends Component {
     constructor(props) {
         super(props);
@@ -18,12 +20,14 @@ class MainContainer extends Component {
             resultsLoaded: false,
             resultsLoading: false,
             allResults: [],
-            chosenResults: [],
+            currentResults: [],
             search_num: 0,
             user_id: 0,
             currentPosition: 0,
             currentLimit: 3,
-            selectedCards: []
+            selectedCards: [],
+            showPreviewCard: false,
+            previewedCards: []
         }
     }
     handleSearchSubmit = async (query) => {
@@ -31,7 +35,7 @@ class MainContainer extends Component {
             this.setState({
                 searchHistory: [...this.state.searchHistory, query],
                 lastSearch: query,
-                chosenResults: [],
+                currentResults: [],
                 search_num: this.state.search_num + 1
             }, () => {
                 const filteredResults = languageParser(query);
@@ -184,10 +188,10 @@ class MainContainer extends Component {
                 }
             }
             this.setState({
-                chosenResults: [...temp],
+                currentResults: [...temp],
                 resultsLoaded: true,
             }, () => {
-                // console.log('this.state.chosenResults afterState is Set', this.state.chosenResults)
+                // console.log('this.state.currentResults afterState is Set', this.state.currentResults)
             })
         } catch (err) {
             console.log(err);
@@ -330,10 +334,17 @@ class MainContainer extends Component {
     }
     render() {
         return (
-            <div>
+            <div className="Main-Container-wrapper">
                 <Navbar />
                 <RenderRock />
-                {this.state.resultsLoaded === true ? <ResultIndex className="Resultsindex-wrapper" getPrevItems={this.getPrevItems} getNextItems={this.getNextItems} filteredResults={this.state.chosenResults} handleSelection={this.handleCardSelection} /> : null}
+                <div className="Main-Container-results-wrapper">
+                    <div className="Main-Container-results-show">{this.state.showPreviewCard === true ? <ResultsShow /> : null}</div>
+                    <div className="Main-Container-results-index">
+                        {this.state.resultsLoaded === true ? <ResultIndex getPrevItems={this.getPrevItems} getNextItems={this.getNextItems} filteredResults={this.state.currentResults} handleSelection={this.handleCardSelection} /> : null}
+                    </div>
+
+                </div>
+
                 <FooterNav searchSubmit={this.handleSearchSubmit} />
             </div>
         );
