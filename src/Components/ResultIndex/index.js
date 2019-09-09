@@ -15,7 +15,6 @@ class ResultIndex extends Component {
                 resultsHaveLoaded: true
             }, () => {
                 this.getAllCards();
-                console.log(this.state.filteredList, 'called from inside componentDidMount')
             })
         }
     }
@@ -26,14 +25,18 @@ class ResultIndex extends Component {
                 resultsHaveLoaded: true
             }, () => {
                 this.getAllCards();
-                console.log(this.state.filteredList, 'called from inside componentDidMount')
             })
         }
     }
+    handleTargetCard = (e) => {
+        console.log(e)
+        // this.props.handleTargetCard(e)
+    }
     getAllCards = () => {
         //pass all of the cards in from props 
+        // console.log(this.props.filteredResults, 'called from inside GetAllCards')
         const results = this.state.filteredResults.map((result, i) => {
-            return (<ul key={i} className="Results-index-card">
+            return (<ul key={i} className="Results-index-card" onClick={this.handleTargetCard.bind(null, result)}>
                 <li>
                     <div className="Results-card-header">
                         <label>{result.title}</label>
@@ -60,10 +63,13 @@ class ResultIndex extends Component {
             <div className="Results-wrapper">
                 <label className="Results-header-label" >What I found...</label>
                 <div className="ResultsIndex-row">
-                    <div><button onClick={this.handlePreviousItems}>Previous</button></div>
                     <div className="ResultsIndex-row">{this.state.resultsHaveLoaded === true ? this.getAllCards() : null}</div>
-                    <div><button onClick={this.handleNextItems}>Next</button></div>
                 </div>
+                <div className="ResultsIndex-row ">
+                    <div className="ResultsIndex-button"><button className="previous" onClick={this.handlePreviousItems}>Previous</button></div>
+                    <div className="ResultsIndex-button"><button className="next" onClick={this.handleNextItems}>Next</button></div>
+                </div>
+
 
 
             </div>

@@ -2,6 +2,7 @@
   text-align: center;
   /* height: 100%; */
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* .App-logo {
@@ -9,6 +10,18 @@
   height: 40vmin;
   pointer-events: none;
 } */
+[class*="col-"] {
+  width: 100%;
+}
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 
 .App-header {
   background-color: #282c34;
@@ -19,9 +32,6 @@
   justify-content: center;
   font-size: calc(10pt + 2vmin);
   color: white;
-}
-.Canvas-BG-grad{
-  background-size: fill;
 }
 .App-link {
   color: #61dafb;
@@ -38,6 +48,9 @@
 .App-main{
   height: 100%;
 }
+/* .Main-Container-wrapper{
+  border: 1px hotpink solid;
+} */
 .App-footer{
   background-color: #282c34;
   position: fixed;
@@ -64,6 +77,15 @@
   left: 0;
   z-index: -10;
 }
+.Canvas-BG-graphic{
+  position: absolute;
+  top: 75%;
+  left: 20%;
+  z-index: -8;
+  border-radius: 50%;
+  opacity: 60%;
+  /* border: 1px solid white; */
+}
 .Results-wrapper{
   display: flex;
   flex-direction: column;
@@ -73,8 +95,9 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  padding: 0 2rem;
-  margin-top: 3rem;
+  padding: 0 .5rem;
+  margin-top: 1rem; 
+  justify-content: center;
 }
 .Results-header-label{
   padding-left: 3rem;
@@ -86,7 +109,7 @@
 }
 .Results-index-card{
   padding: 0;
-  max-width: 350px;
+  max-width: 300px;
   min-width: 150px;
   min-height: 300px;
   list-style: none;
@@ -97,10 +120,23 @@
   border: rgba(255, 255, 255, .8) 1px solid;
   box-shadow: 0 0 20px rgba(0 0 0 .2);
   z-index: 25;
-  margin: .6rem;
+  margin: .3rem;
   border-radius: .2rem;
 }
-
+.ResultsIndex-button{
+  display: flex;
+  order: -5;
+  background-color: rgba(0, 0, 0, 0.70);
+  color: white;
+  font-size: 12pt;
+  border: none;
+  line-height: 2.2rem;
+  padding: 0 1.6rem;
+  border-radius: .3rem;
+  text-align: center;
+  margin: 0 auto;
+  
+}
 .Results-card-header{
   min-height: 100px;
   max-height: 100px;
@@ -140,13 +176,37 @@
 .Results-card-button:hover{
   background-color: rgba(0, 0, 0, .6);
 }
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* This is where the formatting for index results related materials are rendered */
+.Main-Container-results-wrapper{
+  margin: 1rem;
+  display: flex;
+  flex-direction: row; 
+  flex-wrap: wrap;
+}
+.Main-Container-results-index{
+  display: flex;
+  flex-direction: column; 
+  order: 1;
+  width: 66vw;
+  margin: 2rem;
+  /* border: white 1px solid; */
+}
+.Main-Container-results-show{
+  display: flex;
+  flex-direction: column; 
+  order: 2; 
+  width: 25vw;
+  
+  /* border: white 1px solid; */
+}
+.Results-show-card{
+  background-color: rgba(150, 150, 150, .6);
+  width: 100%;
+  height: 50vh; 
+  margin: 0 auto;
+  color: white;
+  border-radius: .3rem;
+  box-shadow: 0 0 20px rgba(0 0 0 .4);
 }
 .Rock-image{
   max-width: 400px;
@@ -160,4 +220,172 @@
 }
 .hidden{
   display: none;
+}
+button.previous, button.next{
+  background-color: rgba(0, 0, 0, 0.70);
+  color: white;
+  font-size: 12pt;
+  border: none;
+  line-height: 2.2rem;
+  border-radius: .3rem;
+  text-align: center;
+  margin: 0;
+  padding: 0 3rem;
+  width: 100%
+}
+@media only screen and (max-width: 600px) {
+  .ResultsIndex-button{
+    display: flex;
+    order: -5;
+    height: auto;
+    padding: 0;
+    margin: 0;
+  }
+  .Main-Container-results-wrapper{
+    margin: .3rem;
+  }
+  .Main-Container-results-index{ 
+    display: flex;
+    order: 2;
+    width: 100vw;
+    margin: .6rem auto;
+    
+  }
+  .Main-Container-results-show{
+    display: flex;
+    order: 0; 
+    width: 100vw;
+    height: auto;
+    margin: .6rem auto;
+  }
+  .ResultsIndex-row{
+    margin: 0;
+    padding: 0;
+    height: 350px;
+  }
+  .Results-show-card{
+    background-color: rgba(150, 150, 150, .5);
+    width: 100%;
+    height: 250px; 
+    margin: 0 auto;
+    color: white;
+  }
+  .Results-index-card{
+    padding: 0;
+    max-width: 100px;
+    min-width: 150px;
+    list-style: none;
+    box-sizing: border-box;
+    text-align: center;
+    background-color: lightgray;
+    border-bottom: 2px solid white;
+    border: rgba(255, 255, 255, .8) 1px solid;
+    box-shadow: 0 0 5px rgba(0 0 0 .2);
+    z-index: 25;
+    margin: .1rem;
+    border-radius: .1rem;
+    height: 75px;
+  }
+  
+  .Results-card-header{
+    min-height: 80px;
+    max-height: 80px;
+    font-size: 11pt;
+    font-style: bolder;
+    font-weight: 400;
+    overflow: hidden;
+    background: rgba(150, 150, 150, .7);
+    padding: .6rem .6rem 0 .6rem;
+    border: 0;
+  }
+  .Results-card-body{
+    font-family: arial;
+    text-align: justify;
+    margin: 0 1.3rem;
+    line-height: 12pt;
+    font-weight: 300;
+    overflow: ellipse;
+    max-height: 0px;
+    min-height: 0px;
+    display: none;
+  }
+  .Rock-image{
+    max-width: 100px;
+    max-height: 100px;
+    min-height: 100px;
+    min-height: 100px;
+    position: absolute;
+    bottom: 2%;
+    left: 80%;
+    z-index: 0;
+  }
+}
+@media only screen and (min-width: 600px) {
+
+  .Rock-image{
+    max-width: 250px;
+    max-height: 250px;
+    min-height: 250px;
+    min-height: 250px;
+    position: absolute;
+    bottom: 2%;
+    left: 75%;
+    z-index: 20;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .ResultsIndex-button{
+    display: flex;
+    order: -5;
+    height: auto;
+    padding: 0;
+    margin: 0 2rem;
+    min-width: 10rem;
+  }
+  .Main-Container-results-index{ 
+    display: flex;
+    order: 0;
+    width: 66vw;
+    margin: .6rem auto;
+    
+  }
+  .Main-Container-results-show{
+    display: flex;
+    order: 1; 
+    width: 40vw;
+    height: auto;
+    margin: .6rem auto;
+  }
+}
+@media only screen and (min-width: 968px) {
+  .Rock-image{
+    max-width: 450px;
+    max-height: 450px;
+    min-height: 450px;
+    min-height: 450px;
+    position: absolute;
+    bottom: 2%;
+    left: 45%;
+    z-index: 20;
+  }
+  .Main-Container-results-index{ 
+    display: flex;
+    order: 0;
+    margin: .6rem auto;
+    width: 66%;
+    
+  }
+  .Main-Container-results-show{
+    display: flex;
+    order: 1; 
+    height: auto;
+    margin: .6rem auto;
+    width: 30%;
+  }
+  .Main-Container-results-wrapper{
+    margin: 1rem;
+    display: flex;
+    flex-direction: row; 
+  }
 }
