@@ -15,7 +15,7 @@ class Navbar extends Component {
                 <div className="Navbar-Data-Wrapper">
                     <div className="Navbar-Data-Label">Queries: </div>
                     <div>{this.state.queries}</div>
-                    <div className="Navbar-Data-Label">Source References: </div>
+                    <div className="Navbar-Data-Label">Source Seeds: </div>
                     <div>{this.state.source}</div>
                     <div className="Navbar-Data-Label">Selections: </div>
                     <div>{this.state.selection}</div>
