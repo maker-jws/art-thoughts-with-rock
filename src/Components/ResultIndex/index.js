@@ -19,22 +19,21 @@ class ResultIndex extends Component {
         }
     }
     componentDidUpdate() {
-        if (this.state.filteredResults !== this.props.filteredResults) {
+        const oldResults = this.state.filteredResults
+        const newResults = this.props.filteredResults
+        if (oldResults[0] !== newResults[0]) {
+            console.log(oldResults, newResults)
             this.setState({
                 filteredResults: this.props.filteredResults,
                 resultsHaveLoaded: true
-            }, () => {
-                this.getAllCards();
             })
         }
     }
     handleTargetCard = (e) => {
-        console.log(e)
-        // this.props.handleTargetCard(e)
+        console.log(e, typeof e, "results index")
+        this.props.handleTargetCard(e)
     }
     getAllCards = () => {
-        //pass all of the cards in from props 
-        // console.log(this.props.filteredResults, 'called from inside GetAllCards')
         const results = this.state.filteredResults.map((result, i) => {
             return (<ul key={i} className="Results-index-card" onClick={this.handleTargetCard.bind(null, result)}>
                 <li>
@@ -69,9 +68,6 @@ class ResultIndex extends Component {
                     <div className="ResultsIndex-button"><button className="previous" onClick={this.handlePreviousItems}>Previous</button></div>
                     <div className="ResultsIndex-button"><button className="next" onClick={this.handleNextItems}>Next</button></div>
                 </div>
-
-
-
             </div>
         );
     }

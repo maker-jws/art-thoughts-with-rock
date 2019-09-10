@@ -22,16 +22,26 @@
   }
 }
 
-
 .App-header {
   background-color: #282c34;
   display: flex;
   width: 100%;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 3rem 0 -3rem;
   font-size: calc(10pt + 2vmin);
   color: white;
+}
+.Navbar-Data-Wrapper{
+  display: flex;
+  flex-direction: row;
+  font-size: 14pt;
+  padding: .5rem 1rem;
+}
+.Navbar-Data-Label{
+  display: flex;
+  flex-direction: row;
+  padding: 0 1rem;
 }
 .App-link {
   color: #61dafb;
@@ -207,6 +217,63 @@
   color: white;
   border-radius: .3rem;
   box-shadow: 0 0 20px rgba(0 0 0 .4);
+}
+.Results-show-card-table{
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  overflow: hidden; 
+}
+.Results-show-title{
+  font-size: 16pt;
+  font-weight: 200;
+}
+.Results-show-image-wrapper{
+  width: 100%;
+  min-height: 150px;
+  text-align: justify; 
+}
+
+.Results-show-image{
+  height: 200px;
+  max-width: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(211, 211, 211, 0.25)
+}
+.Results-show-image-desc{
+  font-size: 8pt;
+  line-height: 11pt;
+  text-align: justify;
+  margin: .6rem 1.3rem .6rem 1.3rem;
+}
+.Results-show-article-desc{
+  font-size: 11pt;
+  line-height: 12pt;
+  text-align: justify;
+  margin: .6rem  1.3rem 0 1.3rem;
+}
+.Results-show-close-button{
+  background-color: rgba(0, 0, 0, 0.70);
+  color: white;
+  font-size: 12pt;
+  border: none;
+  line-height: 2.2rem;
+  padding: 0 1.6rem;
+  border-radius: .3rem;
+  text-align: center;
+  margin: 0.3rem auto 0.3rem auto;
+  text-decoration: none;
+  bottom: 2%;
+}
+.Results-show-getArticle-button{
+  background-color: rgba(0, 0, 0, 0.70);
+  color: white;
+  font-size: 11pt;
+  border: none;
+  border-radius: .3rem;
+  text-align: center;
+  text-decoration: none;
+  padding: 0 1.6rem;
 }
 .Rock-image{
   max-width: 400px;
