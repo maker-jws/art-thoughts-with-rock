@@ -27,7 +27,8 @@ class MainContainer extends Component {
             currentLimit: 3,
             selectedCards: [],
             showPreviewCard: false,
-            previewedCards: []
+            previewedCards: [],
+
         }
     }
     handleSearchSubmit = async (query) => {
@@ -96,6 +97,22 @@ class MainContainer extends Component {
             console.log(err)
         }
     }
+    handleCardDisplay = async (selection) => {
+
+        console.log(selection, 'passed card from results index to maincontainer')
+        const cardToPreview = selection // object 
+        this.setState({
+            previewedCards: [...this.state.previewedCards, cardToPreview],
+            showPreviewCard: !this.state.showPreviewCard,
+        })
+        //called from inside results index will set state to display 
+        //inside show component 
+    }
+    closeCardDisplay = () => {
+        this.setState({
+            showPreviewCard: false,
+        })
+    }
     reqQuery = async (source) => {
         try {
             // console.log('source in reqQuery', source);
@@ -142,8 +159,7 @@ class MainContainer extends Component {
                 query_string: this.state.parsedSearch.filteredString,
                 search_num: this.state.search_num
             }
-            // console.log('source in reqResultsUrl', source)
-            const allUrls = this.state.allResults.map((result) => {
+            this.state.allResults.map((result) => {
                 if (result.link !== "") {
                     const result_url = {
                         cached_ID: result.cacheId,
@@ -154,7 +170,6 @@ class MainContainer extends Component {
                     // console.log(temp, sourcePackage);
                 }
             })
-
             const createSourceResponse = await fetch("http://localhost:8000/source/v1/", {
                 method: "POST",
                 credentials: "include",
@@ -164,11 +179,6 @@ class MainContainer extends Component {
                 }
             });
             const sourceResponse = await createSourceResponse.json();
-            // console.log(
-            //     sourceResponse,
-            //     "parsed response",
-            //     "<<<successful created event", "trigger setState"
-            // );
             this.setState({
                 requestResultsUrl: { ...sourceResponse.data }
             })
@@ -178,8 +188,13 @@ class MainContainer extends Component {
             console.log(err)
         }
     }
+    queryDataBaseNumbers() {
+        //make three fetch calls using get row count for each table length //get all and pass just the length back?
+        //add routes Python/data/count/?GET || Python/source/count/?GET || Python/select/count/?GET
+        //
+        console.log("inside queryDataBaseNumbers");
+    }
     filteredItems = async (source, start, quantity) => {
-        // console.log(source, 'all results at beginning of filteredItems', start, quantity)
         const temp = []
         try {
             for (let i = start; i < quantity; i++) {
@@ -190,8 +205,6 @@ class MainContainer extends Component {
             this.setState({
                 currentResults: [...temp],
                 resultsLoaded: true,
-            }, () => {
-                // console.log('this.state.currentResults afterState is Set', this.state.currentResults)
             })
         } catch (err) {
             console.log(err);
@@ -200,7 +213,7 @@ class MainContainer extends Component {
     getNextItems = async () => {
         try {
             console.log(this.state.currentPosition, this.state.currentLimit, this.state.allResults.length);
-            if (this.state.currentLimit + 1 === this.state.allResults.length) {
+            if (this.state.currentLimit + 1 === this.state.allResults.length && this.state.currentLimit + 10 < this.state.requestQuery.search_num) {
                 this.retrieveItems(this.state.currentPosition + 1)
                 this.setState({
                     currentPosition: this.state.currentPosition + 1,
@@ -230,6 +243,7 @@ class MainContainer extends Component {
                     return nextResults
                 })
             }
+            console.log(this.state.currentPosition, this.state.currentLimit, this.state.allResults.length);
         } catch (err) {
             console.log(err)
         }
@@ -271,8 +285,7 @@ class MainContainer extends Component {
     }
     retrieveItems = async (start) => {
         try {
-            //randomQuery 
-            let api_key = "AIzaSyA2x18slfQC5210EaI_tcMGCkP8vd5wqvE";
+            let api_key = "AIzaSyCyVfsN9ihaglSFcP9SM-NQwdzlnFFOsys";
             let cx = "013070184471859259983%3Aakjlb1b5hvu";
             let q;
 
@@ -297,7 +310,6 @@ class MainContainer extends Component {
             }
             const searchQuery = "https://www.googleapis.com/customsearch/v1?key=" + api_key + "&cx=" + cx + "&q=" + "'" + q + "'" + customQ
             console.log(searchQuery)
-            //actual api call 
             const responseQuery = await fetch(searchQuery, {
                 method: "GET",
                 credentials: "include",
@@ -311,7 +323,9 @@ class MainContainer extends Component {
                 const temp = [];
                 const searchQueryResponse = await responseQuery.json();
                 if (parseInt(searchQueryResponse.searchInformation.totalResults) !== 0) {
-                    this.reqQuery(searchQueryResponse);
+                    if (this.state.allResults.length === 0) {
+                        this.reqQuery(searchQueryResponse);
+                    }
                     searchQueryResponse.items.map((item, idx) => {
                         if (item !== undefined) {
                             item.search_num = this.state.search_num
@@ -325,10 +339,8 @@ class MainContainer extends Component {
                         allResults: [...this.state.allResults, ...temp],
                         nullResults: !this.state.nullResults
                     }, () => {
-
                         this.filteredItems(temp, this.state.currentPosition, this.state.currentLimit);
                         this.reqResultsUrl(temp);
-                        //call function that sends all urls to 
                     })
                 } else {
                     console.log('no results found')
@@ -336,7 +348,7 @@ class MainContainer extends Component {
                         nullResults: !this.state.nullResults
                     })
                 }
-                console.log(searchQueryResponse, "query response");
+                // console.log(searchQueryResponse, "query response");
 
             }
         } catch (err) {
@@ -350,13 +362,11 @@ class MainContainer extends Component {
                 <Navbar />
                 <RenderRock />
                 <div className="Main-Container-results-wrapper">
-                    <div className="Main-Container-results-show">{this.state.showPreviewCard === true ? <ResultsShow /> : null}</div>
+                    <div className="Main-Container-results-show">{this.state.showPreviewCard === true ? <ResultsShow cardsToPreview={this.state.previewedCards} closeCardDisplay={this.closeCardDisplay} /> : null}</div>
                     <div className="Main-Container-results-index">
-                        {this.state.resultsLoaded === true ? <ResultIndex getPrevItems={this.getPrevItems} getNextItems={this.getNextItems} filteredResults={this.state.currentResults} handleSelection={this.handleCardSelection} /> : null}
+                        {this.state.resultsLoaded === true ? <ResultIndex getPrevItems={this.getPrevItems} getNextItems={this.getNextItems} filteredResults={this.state.currentResults} handleSelection={this.handleCardSelection} handleTargetCard={this.handleCardDisplay} /> : null}
                     </div>
-
                 </div>
-
                 <FooterNav searchSubmit={this.handleSearchSubmit} />
             </div>
         );
