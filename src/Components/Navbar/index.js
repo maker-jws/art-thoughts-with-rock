@@ -8,6 +8,22 @@ class Navbar extends Component {
             selection: 0,
         }
     }
+    componentDidMount() {
+        const update = setInterval(() => {
+            if (this.queries !== this.props.currentDBCount["0"]) {
+                const currentInfo = this.props.currentDBCount;
+                this.setState({
+                    queries: currentInfo["0"],
+                    source: currentInfo["1"],
+                    selection: currentInfo["2"]
+                })
+            };
+        }, 200)
+    }
+    componentDidUpdate() {
+
+        // this.setState()
+    }
     render() {
         return (
             <nav className="App-header">

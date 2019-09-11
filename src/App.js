@@ -21,11 +21,11 @@ class App extends Component {
         "#ff9966",
         "#ffcccc",
         "#ff9999"],
-      Mx: 100,
-      My: 100,
+      Mx: -1.1 * Math.floor(window.innerWidth) / 10,
+      My: Math.floor(window.innerHeight) / 10,
       Mradius: 150,
       Mradians: 0,
-      Mvelocity: .001
+      Mvelocity: .0009
     }
   }
   componentDidMount() {
@@ -39,8 +39,8 @@ class App extends Component {
     const Mradians = this.state.Mradians
     const Mvelocity = this.state.Mvelocity
     const newMRadians = Mradians + Mvelocity
-    const newMX = Mx + (Math.cos(Mradians) * 1.2)
-    const newMY = My + (Math.sin(Mradians) * .6)
+    const newMX = Mx + (Math.cos(Mradians) * 1.5)
+    const newMY = My + (Math.sin(Mradians) * .68)
 
     const Sx = this.state.Sx
     const Sy = this.state.Sy
@@ -50,7 +50,7 @@ class App extends Component {
     const newSX = Sx + (Math.cos(Sradians) * 1.2)
     const newSY = Sy + (Math.sin(Sradians) * 1.6)
     this.setState({
-      Srotation: rotation,
+      rotation: rotation,
       Mradians: newMRadians,
       Mx: newMX,
       My: newMY,
@@ -76,9 +76,8 @@ class App extends Component {
         <main className="App-main">
           <MainContainer resultsToRender={this.state.chosenResults} />
         </main>
-
         <CanvasBG rotation={this.state.rotation} className="Canvas-BG-grad" width={400} height={400} winWidth={this.state.winWidth} winHeight={this.state.winHeight} />
-        {/* {(Math.sign(this.state.Mx) === 1 && Math.sign(this.state.My) === 1) ? <RenderSky className="RenderSky-canvas" x={this.state.Mx} y={this.state.My} width={this.state.winWidth} height={this.state.winHeight} radius={this.state.Mradius} colors={this.state.colors} /> : null} */}
+        {this.state.Mx > -200 && this.state.My > -250 ? <RenderSky className="RenderSky-canvas" x={this.state.Mx} y={this.state.My} width={this.state.winWidth} height={this.state.winHeight} radius={this.state.Mradius} colors={this.state.colors} /> : null}
       </div>);
   }
 }
