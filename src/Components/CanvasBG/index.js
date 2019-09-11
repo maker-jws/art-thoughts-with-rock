@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import RenderSky from '../RenderSky/index'
 class CanvasBG extends Component {
     constructor(props) {
         super(props);
@@ -8,6 +9,18 @@ class CanvasBG extends Component {
             width: this.props.width,
             height: this.props.height,
             rotation: this.props.rotation,
+            colors: [
+                "#ffffcc",
+                "#ffff99",
+                "#ffcc99",
+                "#ff9966",
+                "#ffcccc",
+                "#ff9999"],
+            x: this.props.winWidth / 2,
+            y: 0,
+            radius: 150,
+            radians: .3,
+            velocity: .000099
         }
         this.paintBG = this.paintBG.bind(this);
     }
@@ -18,7 +31,6 @@ class CanvasBG extends Component {
         const grd = ctx.createRadialGradient(this.props.winWidth / 2, this.props.winHeight, 10, this.props.winWidth / 4, this.props.winHeight, this.props.winWidth);
         grd.addColorStop(0, "darkgray");
         grd.addColorStop(1, "black");
-        // Fill with gradient
         ctx.fillStyle = grd;
         ctx.fillRect(0, 0, this.props.winWidth, this.props.winHeight);
     }
@@ -41,16 +53,56 @@ class CanvasBG extends Component {
     }
 
     //animated gradient tutorial: http://jsfiddle.net/fkU4Q/
+    tick = () => {
+        const rotation = this.state.rotation + 0.02;
+        const x = this.state.x
+        const y = this.state.y
+        const radians = this.state.radians
+        const velocity = this.state.velocity
+        const newRadians = radians + velocity
+        const newX = x + (Math.cos(radians) * 1.2)
+        const newY = y + (Math.sin(radians) * 1.6)
 
+        const newPosition = {
+            radians: radians + velocity,
+            x: newX,
+            y: newY,
+        }
+        // console.log(newPosition.x)
+        this.setState({
+            radians: newRadians,
+            x: newX,
+            y: newY,
+        }, () => { requestAnimationFrame(this.tick) });
+    }
     componentDidMount() {
         this.paintBG();
-        this.paintGraphic();
+        // this.paintGraphic();
+        this.tick();
     }
 
     componentDidUpdate() {
-        this.paintBG();
-        this.paintGraphic();
+        // this.paintBG(); // works if the app to check if background changes size 
+        if (this.state.winHeight !== this.props.winHeight || this.state.winWidth !== this.props.winWidth) {
+            this.setState({
+                winWidth: this.props.winWidth, //sets state of window so the canvas will always remain somewhat proportional and smaller than the whole window
+                winHeight: this.props.winHeight,
+            }, this.paintBG());
+        }
+        // this.paintGraphic();
     }
+
+    // componentDidMount() {
+    //     requestAnimationFrame(this.tick); //starts rotation
+    //     setInterval(() => { this.updateBGSize() }, 200)
+    // }
+    // tick() {
+    //     const rotation = this.state.rotation + 0.02;
+    //     this.setState({ rotation });
+    //     requestAnimationFrame(this.tick); //communicates with dom, calling this.tick (itself)
+    // }
+
+
     render() {
         const canvasStyle = {
             border: "1px solid black",
@@ -58,7 +110,8 @@ class CanvasBG extends Component {
         const { winWidth, winHeight, height, width } = this.props;
         return (
             <div>
-                <canvas className="Canvas-BG-graphic" ref="graphic" width={width} height={height} />
+                <RenderSky x={this.state.x} y={this.state.y} width={this.state.winWidth} height={this.state.winHeight} radius={this.state.radius} colors={this.state.colors} />
+                {/* <canvas className="Canvas-BG-graphic" ref="graphic" width={width} height={height} /> */}
                 <canvas className="Canvas-BG-grad"
                     ref="canvas"
                     width={winWidth}
@@ -70,9 +123,3 @@ class CanvasBG extends Component {
 }
 
 export default CanvasBG;
-
-// <canvas width={this.props.winWidth} height={this.props.winHeight} style={canvasStyle} ref='canvas' onClick={(e) => {
-//     console.log(e.clientX)
-//     this.props.onClicked(e.clientX, e.clientY)  //passing up coordinates to main container
-// }}
-// />
