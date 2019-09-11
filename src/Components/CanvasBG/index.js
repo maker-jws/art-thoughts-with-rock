@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import RenderSky from '../RenderSky/index'
 class CanvasBG extends Component {
     constructor(props) {
         super(props);
@@ -9,18 +8,6 @@ class CanvasBG extends Component {
             width: this.props.width,
             height: this.props.height,
             rotation: this.props.rotation,
-            colors: [
-                "#ffffcc",
-                "#ffff99",
-                "#ffcc99",
-                "#ff9966",
-                "#ffcccc",
-                "#ff9999"],
-            x: this.props.winWidth / 2,
-            y: 0,
-            radius: 150,
-            radians: .3,
-            velocity: .000099
         }
         this.paintBG = this.paintBG.bind(this);
     }
@@ -53,32 +40,10 @@ class CanvasBG extends Component {
     }
 
     //animated gradient tutorial: http://jsfiddle.net/fkU4Q/
-    tick = () => {
-        const rotation = this.state.rotation + 0.02;
-        const x = this.state.x
-        const y = this.state.y
-        const radians = this.state.radians
-        const velocity = this.state.velocity
-        const newRadians = radians + velocity
-        const newX = x + (Math.cos(radians) * 1.2)
-        const newY = y + (Math.sin(radians) * 1.6)
 
-        const newPosition = {
-            radians: radians + velocity,
-            x: newX,
-            y: newY,
-        }
-        // console.log(newPosition.x)
-        this.setState({
-            radians: newRadians,
-            x: newX,
-            y: newY,
-        }, () => { requestAnimationFrame(this.tick) });
-    }
     componentDidMount() {
         this.paintBG();
-        // this.paintGraphic();
-        this.tick();
+        this.paintGraphic();
     }
 
     componentDidUpdate() {
@@ -89,7 +54,7 @@ class CanvasBG extends Component {
                 winHeight: this.props.winHeight,
             }, this.paintBG());
         }
-        // this.paintGraphic();
+        this.paintGraphic();
     }
 
     // componentDidMount() {
@@ -110,8 +75,8 @@ class CanvasBG extends Component {
         const { winWidth, winHeight, height, width } = this.props;
         return (
             <div>
-                <RenderSky x={this.state.x} y={this.state.y} width={this.state.winWidth} height={this.state.winHeight} radius={this.state.radius} colors={this.state.colors} />
-                {/* <canvas className="Canvas-BG-graphic" ref="graphic" width={width} height={height} /> */}
+
+                <canvas className="Canvas-BG-graphic" ref="graphic" width={width} height={height} />
                 <canvas className="Canvas-BG-grad"
                     ref="canvas"
                     width={winWidth}

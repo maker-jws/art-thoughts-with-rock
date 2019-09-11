@@ -97,10 +97,10 @@
   /* border: 1px solid white; */
 }
 .RenderSky-canvas{
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: -5;
 }
 .Results-wrapper{
   display: flex;

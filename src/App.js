@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import "./App.css";
 import MainContainer from "./Components/MainContainer/index"
 import CanvasBG from './Components/CanvasBG/index';
-
+import RenderSky from './Components/RenderSky/index'
 
 class App extends Component {
   constructor(props) {
@@ -14,13 +14,51 @@ class App extends Component {
       clickedX: null,
       clickedY: null,
       rotation: 0,
+      colors: [
+        "#ffffcc",
+        "#ffff99",
+        "#ffcc99",
+        "#ff9966",
+        "#ffcccc",
+        "#ff9999"],
+      Mx: 100,
+      My: 100,
+      Mradius: 150,
+      Mradians: 0,
+      Mvelocity: .001
     }
   }
   componentDidMount() {
+    this.animateObjects();
     setInterval(() => { this.updateBGSize() }, 250) //calls update once every 250ms
   }
+  animateObjects = () => {
+    const rotation = this.state.rotation + 0.02;
+    const Mx = this.state.Mx
+    const My = this.state.My
+    const Mradians = this.state.Mradians
+    const Mvelocity = this.state.Mvelocity
+    const newMRadians = Mradians + Mvelocity
+    const newMX = Mx + (Math.cos(Mradians) * 1.2)
+    const newMY = My + (Math.sin(Mradians) * .6)
 
-
+    const Sx = this.state.Sx
+    const Sy = this.state.Sy
+    const Sradians = this.state.Sradians
+    const Svelocity = this.state.Svelocity
+    const newSRadians = Sradians + Svelocity
+    const newSX = Sx + (Math.cos(Sradians) * 1.2)
+    const newSY = Sy + (Math.sin(Sradians) * 1.6)
+    this.setState({
+      Srotation: rotation,
+      Mradians: newMRadians,
+      Mx: newMX,
+      My: newMY,
+      Sradians: newSRadians,
+      Sx: newSX,
+      Sy: newSY,
+    }, () => { requestAnimationFrame(this.animateObjects) });
+  }
   updateBGSize() {
     const newHeight = window.innerHeight
     const newWidth = window.innerWidth
@@ -31,22 +69,16 @@ class App extends Component {
       })
     }
   }
-  onClicked = (x, y) => {
-    this.setState({
-      ...this.state,
-      clickedX: x,
-      clickedY: y,
-    })
-    console.log(this.state.clickedX, this.state.clickedY)
-  }
+
   render() {
     return (
       <div className="App">
         <main className="App-main">
-          <MainContainer resultsToRender={this.state.chosenResults} onClicked={this.onClicked} />
+          <MainContainer resultsToRender={this.state.chosenResults} />
         </main>
 
         <CanvasBG rotation={this.state.rotation} className="Canvas-BG-grad" width={400} height={400} winWidth={this.state.winWidth} winHeight={this.state.winHeight} />
+        {/* {(Math.sign(this.state.Mx) === 1 && Math.sign(this.state.My) === 1) ? <RenderSky className="RenderSky-canvas" x={this.state.Mx} y={this.state.My} width={this.state.winWidth} height={this.state.winHeight} radius={this.state.Mradius} colors={this.state.colors} /> : null} */}
       </div>);
   }
 }
