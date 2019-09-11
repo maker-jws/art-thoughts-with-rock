@@ -35,6 +35,7 @@ function Particle(x, y, radius, color) {  //this is the new Class Particle
         this.x = x + Math.cos(this.radians) * canvas.width / 2 - (.25 * canvas.width); // the multiplier is the radius of the circle 
         this.y = y + Math.sin(this.radians) * canvas.height / 1.5;
         // console.log(Math.cos(this.radians))
+
         this.draw();
     }
     this.draw = () => {
@@ -70,6 +71,7 @@ function animate() {
     particles.forEach(particle => {
         particle.update();   //renders animation for each particle 
     });
+    // console.log(particles[0].radians, particles[0].velocity, particles[0].x, particles[0].y)
 };
 
 window.onload = init();

@@ -96,6 +96,12 @@
   opacity: 60%;
   /* border: 1px solid white; */
 }
+.RenderSky-canvas{
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -5;
+}
 .Results-wrapper{
   display: flex;
   flex-direction: column;
