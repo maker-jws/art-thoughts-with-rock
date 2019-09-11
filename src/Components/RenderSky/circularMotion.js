@@ -39,16 +39,17 @@ function Particle(x, y, radius, color) {  //this is the new Class Particle
         this.draw();
     }
     this.draw = () => {
+
         const gradient = c.createLinearGradient(0, 0, canvas.width, canvas.height);
         gradient.addColorStop("0.2", "magenta");
         gradient.addColorStop("0.5", "blue");
         gradient.addColorStop("1.0", "red");
+        c.strokeStyle = gradient
+        c.lineWidth = 20;
         c.beginPath();
         c.arc(this.x + 10, this.y, this.radius, 0, Math.PI * 2, false); //draws circle 
         c.fillStyle = this.color;
         c.fill();
-        c.strokeStyle = gradient
-        c.lineWidth = 20;
         c.stroke();
         c.closePath();
     }

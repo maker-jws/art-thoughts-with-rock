@@ -26,7 +26,7 @@ class CanvasBG extends Component {
         const { width, height, rotation } = this.props;
         const graphic = this.refs.graphic //targets the specific canvas
         const ctx = graphic.getContext("2d");
-        ctx.clearRect(width / 2, height / 2, width / 2, height / 2)
+        // ctx.clearRect(width / 2, height / 2, width / 2, height / 2)
         ctx.save();
         const grd = ctx.createRadialGradient(width / 2, height, 10, width / 4, height, width);
         // ctx.translate(width / 2, height / 2);

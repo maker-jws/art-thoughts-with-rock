@@ -28,7 +28,7 @@ class MainContainer extends Component {
             selectedCards: [],
             showPreviewCard: false,
             previewedCards: [],
-
+            currentDBCount: {},
         }
     }
     handleSearchSubmit = async (query) => {
@@ -91,6 +91,8 @@ class MainContainer extends Component {
             );
             this.setState({
                 selectedCards: [...this.state.selectedCards, selectionResponse.data]
+            }, () => {
+                this.queryDataBaseNumbers();
             })
             return selectionResponse;
         } catch (err) {
@@ -188,13 +190,34 @@ class MainContainer extends Component {
             console.log(err)
         }
     }
-    queryDataBaseNumbers() {
-        //make three fetch calls using get row count for each table length //get all and pass just the length back?
-        //add routes Python/data/count/?GET || Python/source/count/?GET || Python/select/count/?GET
-        //
-        console.log("inside queryDataBaseNumbers");
+    queryDataBaseNumbers = async () => {
+        try {
+            const responseCount = await fetch("http://localhost:8000/db/stat", {
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            if (responseCount.status !== 200) {
+                throw Error("Error 404 from Server");
+            } else {
+                const currentDBCount = await responseCount.json();
+                console.log(currentDBCount.data, 'server Response')
+                this.setState({
+                    currentDBCount: currentDBCount.data
+                }, () => {
+                    console.log(this.state.currentDBCount);
+                })
+                return currentDBCount.data
+            }
+        }
+        catch (err) {
+            console.log(err, "Fetch Error");
+        }
     }
     filteredItems = async (source, start, quantity) => {
+        this.queryDataBaseNumbers()
         const temp = []
         try {
             for (let i = start; i < quantity; i++) {
@@ -341,6 +364,7 @@ class MainContainer extends Component {
                     }, () => {
                         this.filteredItems(temp, this.state.currentPosition, this.state.currentLimit);
                         this.reqResultsUrl(temp);
+                        this.queryDataBaseNumbers();
                     })
                 } else {
                     console.log('no results found')
@@ -356,10 +380,38 @@ class MainContainer extends Component {
         }
 
     }
+    componentWillMount() {
+        this.queryDataBaseNumbers();
+    }
+    // componentDidUpdate() {
+    //     const getUpdate = async () => {
+    //         try {
+    //             const data = await this.queryDataBaseNumbers()
+    //             console.log(data, "componetDM")
+    //             return data
+    //         }
+    //         catch (err) {
+    //             console.log(err);
+    //         }
+    //     }
+    //     if (getUpdate() !== this.state.currentDBCount) {
+    //         console.log("update detected")
+    //     }
+    //     // const update = setInterval(() => {
+    //     //     if (this.queries !== this.props.currentDBCount["0"]) {
+    //     //         const currentInfo = this.props.currentDBCount;
+    //     //         this.setState({
+    //     //             queries: currentInfo["0"],
+    //     //             source: currentInfo["1"],
+    //     //             selection: currentInfo["2"]
+    //     //         })
+    //     //     };
+    //     // }, 1000)
+    // }
     render() {
         return (
             <div className="Main-Container-wrapper">
-                <Navbar />
+                <Navbar currentDBCount={this.state.currentDBCount} getCurrentDBCount={this.queryDataBaseNumbers} />
                 <RenderRock />
                 <div className="Main-Container-results-wrapper">
                     <div className="Main-Container-results-show">{this.state.showPreviewCard === true ? <ResultsShow cardsToPreview={this.state.previewedCards} closeCardDisplay={this.closeCardDisplay} /> : null}</div>
