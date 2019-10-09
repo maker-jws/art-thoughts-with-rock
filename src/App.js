@@ -39,7 +39,7 @@ class App extends Component {
     const Mradians = this.state.Mradians
     const Mvelocity = this.state.Mvelocity
     const newMRadians = Mradians + Mvelocity
-    const newMX = Mx + (Math.cos(Mradians) * 1.5)
+    const newMX = Mx + (Math.cos(Mradians) * 1.6)
     const newMY = My + (Math.sin(Mradians) * .68)
 
     const Sx = this.state.Sx

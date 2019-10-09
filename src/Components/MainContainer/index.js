@@ -75,7 +75,7 @@ class MainContainer extends Component {
                 }
             }
             console.log(selectedPackage, "after establishing content - handleCardSelection")
-            const createSelectedResponse = await fetch("http://localhost:8000/select/v1/", {
+            const createSelectedResponse = await fetch(process.env.REACT_APP_BACKEND_URL+"/select/v1/", {
                 method: "POST",
                 credentials: "include",
                 body: JSON.stringify(selectedPackage),
@@ -129,7 +129,7 @@ class MainContainer extends Component {
                 user_id: this.state.user_id,
             }
             console.log(queryPackage, "after establishing content - line 58 -MainContainer")
-            const createQueryResponse = await fetch("http://localhost:8000/data/v1/", {
+            const createQueryResponse = await fetch(process.env.REACT_APP_BACKEND_URL+"/data/v1/", {
                 method: "POST",
                 credentials: "include",
                 body: JSON.stringify(queryPackage),
@@ -172,7 +172,7 @@ class MainContainer extends Component {
                     // console.log(temp, sourcePackage);
                 }
             })
-            const createSourceResponse = await fetch("http://localhost:8000/source/v1/", {
+            const createSourceResponse = await fetch(process.env.REACT_APP_BACKEND_URL+"/source/v1/", {
                 method: "POST",
                 credentials: "include",
                 body: JSON.stringify(sourcePackage),
@@ -192,7 +192,7 @@ class MainContainer extends Component {
     }
     queryDataBaseNumbers = async () => {
         try {
-            const responseCount = await fetch("http://localhost:8000/db/stat", {
+            const responseCount = await fetch(process.env.REACT_APP_BACKEND_URL+"/db/stat/", {
                 method: "GET",
                 credentials: "include",
                 headers: {
@@ -383,31 +383,6 @@ class MainContainer extends Component {
     componentWillMount() {
         this.queryDataBaseNumbers();
     }
-    // componentDidUpdate() {
-    //     const getUpdate = async () => {
-    //         try {
-    //             const data = await this.queryDataBaseNumbers()
-    //             console.log(data, "componetDM")
-    //             return data
-    //         }
-    //         catch (err) {
-    //             console.log(err);
-    //         }
-    //     }
-    //     if (getUpdate() !== this.state.currentDBCount) {
-    //         console.log("update detected")
-    //     }
-    //     // const update = setInterval(() => {
-    //     //     if (this.queries !== this.props.currentDBCount["0"]) {
-    //     //         const currentInfo = this.props.currentDBCount;
-    //     //         this.setState({
-    //     //             queries: currentInfo["0"],
-    //     //             source: currentInfo["1"],
-    //     //             selection: currentInfo["2"]
-    //     //         })
-    //     //     };
-    //     // }, 1000)
-    // }
     render() {
         return (
             <div className="Main-Container-wrapper">
