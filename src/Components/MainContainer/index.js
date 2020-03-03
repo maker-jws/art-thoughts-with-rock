@@ -333,9 +333,8 @@ class MainContainer extends Component {
             }
             const searchQuery = "https://www.googleapis.com/customsearch/v1?key=" + api_key + "&cx=" + cx + "&q=" + "'" + q + "'" + customQ
             console.log(searchQuery)
-            const responseQuery = await fetch(searchQuery, {
+            const responseQuery = await fetch('https://www.googleapis.com/customsearch/v1?q=testing&key=AIzaSyByXdGVWSdHPE5GNGz_6YghKchf6gPloEc&cx=001578993306550774795:gctvg7qkooo', {
                 method: "GET",
-                credentials: "include",
                 headers: {
                     "Content-Type": "application/json"
                 }
