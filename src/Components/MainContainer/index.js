@@ -12,7 +12,7 @@ class MainContainer extends Component {
         this.state = {
             lastSearch: "",
             searchHistory: [],
-            defaultExclusions: "pinterest+artnews+imgur+etsy+poster\-art",
+            defaultExclusions: "pinterest+artnews+imgur+etsy+poster-art",
             parsedSearch: {},
             nullResults: false,
             requestQuery: {}, //the keys to be sent to db for 'Data'
@@ -74,7 +74,7 @@ class MainContainer extends Component {
                     image_full: selection.pagemap.cse_image[0].src
                 }
             }
-            console.log(selectedPackage, "after establishing content - handleCardSelection")
+            // console.log(selectedPackage, "after establishing content - handleCardSelection")
             const createSelectedResponse = await fetch(process.env.REACT_APP_BACKEND_URL+"/select/v1/", {
                 method: "POST",
                 credentials: "include",
@@ -84,11 +84,11 @@ class MainContainer extends Component {
                 }
             });
             const selectionResponse = await createSelectedResponse.json();
-            console.log(
-                selectionResponse,
-                "parsed response",
-                "<<<successful created event", "trigger setState"
-            );
+            // console.log(
+            //     selectionResponse,
+            //     "parsed response",
+            //     "<<<successful created event", "trigger setState"
+            // );
             this.setState({
                 selectedCards: [...this.state.selectedCards, selectionResponse.data]
             }, () => {
@@ -101,7 +101,7 @@ class MainContainer extends Component {
     }
     handleCardDisplay = async (selection) => {
 
-        console.log(selection, 'passed card from results index to maincontainer')
+        // console.log(selection, 'passed card from results index to maincontainer')
         const cardToPreview = selection // object 
         this.setState({
             previewedCards: [...this.state.previewedCards, cardToPreview],
@@ -128,7 +128,7 @@ class MainContainer extends Component {
                 search_num: parseInt(source.queries.request[0].totalResults),
                 user_id: this.state.user_id,
             }
-            console.log(queryPackage, "after establishing content - line 58 -MainContainer")
+            // console.log(queryPackage, "after establishing content - line 58 -MainContainer")
             const createQueryResponse = await fetch(process.env.REACT_APP_BACKEND_URL+"/data/v1/", {
                 method: "POST",
                 credentials: "include",
@@ -138,11 +138,11 @@ class MainContainer extends Component {
                 }
             });
             const queryResponse = await createQueryResponse.json();
-            console.log(
-                queryResponse,
-                "parsed response",
-                "<<<successful created event", "trigger setState"
-            );
+            // console.log(
+            //     queryResponse,
+            //     "parsed response",
+            //     "<<<successful created event", "trigger setState"
+            // );
             this.setState({
                 requestQuery: { ...queryResponse.data }
             })
@@ -159,7 +159,7 @@ class MainContainer extends Component {
                 search_num: this.state.search_num,
                 initial_value: 0, //will be calculated on backend when search fetch is migrated
                 query_string: this.state.parsedSearch.filteredString,
-                search_num: this.state.search_num
+                search_num: this.state.search_num,
             }
             this.state.allResults.map((result) => {
                 if (result.link !== "") {
@@ -192,7 +192,7 @@ class MainContainer extends Component {
     }
     queryDataBaseNumbers = async () => {
         try {
-            const responseCount = await fetch(process.env.REACT_APP_BACKEND_URL+"/db/stat/", {
+            const responseCount = await fetch(process.env.REACT_APP_BACKEND_URL+"/db/stat", {
                 method: "GET",
                 credentials: "include",
                 headers: {
@@ -203,11 +203,11 @@ class MainContainer extends Component {
                 throw Error("Error 404 from Server");
             } else {
                 const currentDBCount = await responseCount.json();
-                console.log(currentDBCount.data, 'server Response')
+                // console.log(currentDBCount.data, 'server Response')
                 this.setState({
                     currentDBCount: currentDBCount.data
                 }, () => {
-                    console.log(this.state.currentDBCount);
+                    // console.log(this.state.currentDBCount);
                 })
                 return currentDBCount.data
             }
@@ -235,7 +235,7 @@ class MainContainer extends Component {
     }
     getNextItems = async () => {
         try {
-            console.log(this.state.currentPosition, this.state.currentLimit, this.state.allResults.length);
+            // console.log(this.state.currentPosition, this.state.currentLimit, this.state.allResults.length);
             if (this.state.currentLimit + 1 === this.state.allResults.length && this.state.currentLimit + 10 < this.state.requestQuery.search_num) {
                 this.retrieveItems(this.state.currentPosition + 1)
                 this.setState({
@@ -266,7 +266,7 @@ class MainContainer extends Component {
                     return nextResults
                 })
             }
-            console.log(this.state.currentPosition, this.state.currentLimit, this.state.allResults.length);
+            // console.log(this.state.currentPosition, this.state.currentLimit, this.state.allResults.length);
         } catch (err) {
             console.log(err)
         }
@@ -308,8 +308,7 @@ class MainContainer extends Component {
     }
     retrieveItems = async (start) => {
         try {
-            let api_key = "AIzaSyCyVfsN9ihaglSFcP9SM-NQwdzlnFFOsys";
-            let cx = "013070184471859259983%3Aakjlb1b5hvu";
+            let cx = "001578993306550774795%3Agctvg7qkooo";
             let q;
 
             let exactTerms
@@ -331,9 +330,10 @@ class MainContainer extends Component {
             } else {
                 q = this.state.parsedSearch.targetStrings[0];  //this is where formatting has to occur
             }
-            const searchQuery = "https://www.googleapis.com/customsearch/v1?key=" + api_key + "&cx=" + cx + "&q=" + "'" + q + "'" + customQ
-            console.log(searchQuery)
-            const responseQuery = await fetch('https://www.googleapis.com/customsearch/v1?q=testing&key=AIzaSyByXdGVWSdHPE5GNGz_6YghKchf6gPloEc&cx=001578993306550774795:gctvg7qkooo', {
+            const sQuery = `https://www.googleapis.com/customsearch/v1?q=${q}&key=${process.env.REACT_APP_KEY}&cx=${cx}${customQ}`
+            // const searchQuery = "https://www.googleapis.com/customsearch/v1?key=" + api_key + "&cx=" + cx + "&q=" + "'" + q + "'" + customQ
+            console.log(sQuery)
+            const responseQuery = await fetch(sQuery, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"

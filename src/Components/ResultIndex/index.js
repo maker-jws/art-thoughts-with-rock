@@ -8,7 +8,7 @@ class ResultIndex extends Component {
         };
     }
     componentDidMount() {
-        console.log(this.state, "state at start of componentDidMount - results index")
+        // console.log(this.state, "state at start of componentDidMount - results index")
         if (this.state.filteredResults !== this.props.filteredResults) {
             this.setState({
                 filteredResults: [...this.props.filteredResults],
